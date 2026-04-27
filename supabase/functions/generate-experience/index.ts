@@ -204,7 +204,7 @@ Netlink General Solutions PLC`;
     });
   } catch (e) {
     console.error("generate-experience error:", e);
-    return new Response(JSON.stringify({ error: e.message }), {
+    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
       status: 400,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
