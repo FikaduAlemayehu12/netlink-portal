@@ -27,19 +27,19 @@ const htmlFallback = () => ({
   },
 });
 
-export default defineConfig(({ command }) => ({
+export default defineConfig({
   server: { host: "::", port: 8080, strictPort: true },
   resolve: { alias: { "@": path.resolve(process.cwd(), "src") } },
   plugins: [
-    tanstackRouter({ target: "react", autoCodeSplitting: command === "build" }),
+    tanstackRouter({ target: "react" }),
     react(),
     tailwindcss(),
     tsconfigPaths({ projects: ["./tsconfig.json"] }),
     htmlFallback(),
-  ],
+  ] as any,
   define: {
     "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(process.env.VITE_SUPABASE_URL ?? process.env.SUPABASE_URL ?? ""),
     "import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY": JSON.stringify(process.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.SUPABASE_ANON_KEY ?? ""),
     "import.meta.env.VITE_SUPABASE_PROJECT_ID": JSON.stringify(process.env.VITE_SUPABASE_PROJECT_ID ?? "bydtyfwisrjyggvsqxdw"),
   },
-}));
+});
