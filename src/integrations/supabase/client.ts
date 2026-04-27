@@ -2,7 +2,7 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-type UntypedDatabase = Database extends { public: { Tables: Record<string, never> } } ? any : Database;
+type UntypedDatabase = any;
 
 function createSupabaseClient() {
   // Use import.meta.env for client-side (Vite build-time replacement)
