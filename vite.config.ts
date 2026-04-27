@@ -1,16 +1,13 @@
-// @lovable.dev/vite-tanstack-config already includes the following — do NOT add them manually
-// or the app will break with duplicate plugins:
-//   - tanstackStart, viteReact, tailwindcss, tsConfigPaths, cloudflare (build-only),
-//     componentTagger (dev-only), VITE_* env injection, @ path alias, React/TanStack dedupe,
-//     error logger plugins, and sandbox detection (port/host/strictPort).
-// You can pass additional config via defineConfig({ vite: { ... } }) if needed.
-import { defineConfig } from "@lovable.dev/vite-tanstack-config";
-import { NodeRequest, sendNodeResponse } from "srvx/node";
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import tsconfigPaths from "vite-tsconfig-paths";
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import fs from "node:fs/promises";
 import path from "node:path";
 
-const cloudflareStartDevMiddleware = () => ({
-  name: "cloudflare-start-dev-middleware",
+const htmlFallback = () => ({
+  name: "html-fallback",
   configureServer(server: any) {
     server.middlewares.use(async (req: any, res: any, next: any) => {
       if (req.method !== "GET" || !req.headers.accept?.includes("text/html")) {
@@ -27,24 +24,22 @@ const cloudflareStartDevMiddleware = () => ({
         next(error);
       }
     });
-
-    return () => {
-      server.middlewares.use(async (req: any, res: any, next: any) => {
-        const serverEnv = server.environments?.ssr ?? server.environments?.server;
-
-        if (!serverEnv || typeof serverEnv.dispatchFetch !== "function") {
-          return next();
-        }
-
-        if (req.originalUrl) req.url = req.originalUrl;
-        const request = new NodeRequest({ req, res });
-        const response = await serverEnv.dispatchFetch(request);
-        return sendNodeResponse(res, response);
-      });
-    };
   },
 });
 
-export default defineConfig({
-  plugins: [cloudflareStartDevMiddleware()],
-});
+export default defineConfig(({ command }) => ({
+  server: { host: "::", port: 8080, strictPort: true },
+  resolve: { alias: { "@": path.resolve(process.cwd(), "src") } },
+  plugins: [
+    tanstackRouter({ target: "react", autoCodeSplitting: command === "build" }),
+    react(),
+    tailwindcss(),
+    tsconfigPaths({ projects: ["./tsconfig.json"] }),
+    htmlFallback(),
+  ],
+  define: {
+    "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(process.env.VITE_SUPABASE_URL ?? process.env.SUPABASE_URL ?? ""),
+    "import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY": JSON.stringify(process.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.SUPABASE_ANON_KEY ?? ""),
+    "import.meta.env.VITE_SUPABASE_PROJECT_ID": JSON.stringify(process.env.VITE_SUPABASE_PROJECT_ID ?? "bydtyfwisrjyggvsqxdw"),
+  },
+}));
