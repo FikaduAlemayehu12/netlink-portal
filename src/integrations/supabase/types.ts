@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      module_permissions: {
+        Row: {
+          created_at: string
+          granted_by: string | null
+          id: string
+          module: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          granted_by?: string | null
+          id?: string
+          module: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          granted_by?: string | null
+          id?: string
+          module?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -79,6 +103,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      has_module_permission: {
+        Args: { _module: string; _user_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
