@@ -21,8 +21,6 @@ export default function StaffLogin() {
     if (!authLoading && user) {
       if (roles.length > 0) {
         navigate({ to: "/staff/dashboard", replace: true });
-      } else {
-        navigate({ to: "/portal", replace: true });
       }
     }
   }, [user, roles, authLoading, navigate]);
@@ -55,11 +53,11 @@ export default function StaffLogin() {
             .select("role")
             .eq("user_id", signedIn.id);
           if (rolesData && rolesData.length > 0) {
-            window.location.href = "/staff/dashboard";
+            navigate({ to: "/staff/dashboard", replace: true });
           } else {
             // Not staff — sign out and show error
             await supabase.auth.signOut();
-            setError("This account does not have staff access. Please use the Careers page to sign in as an applicant.");
+            setError("This account does not have staff access. Please use the public Careers page for applications.");
             setLoading(false);
           }
         }
