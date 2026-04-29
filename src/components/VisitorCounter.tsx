@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Users, Eye, Mail } from "lucide-react";
+import { Eye, Mail } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function VisitorCounter() {
@@ -20,20 +20,28 @@ export default function VisitorCounter() {
     const hash = getOrCreateHash();
 
     const refresh = async () => {
-      const [trackRes, onlineRes, subsRes] = await Promise.all([
-        supabase.rpc("track_visitor" as any, { p_hash: hash }),
-        supabase.rpc("get_online_count" as any),
-        supabase.rpc("get_subscriber_count" as any),
-      ]);
-      if (typeof trackRes.data === "number") setTotal(trackRes.data);
-      if (typeof onlineRes.data === "number") setOnline(onlineRes.data);
-      if (typeof subsRes.data === "number") setSubscribers(subsRes.data);
+      try {
+        const [trackRes, onlineRes, subsRes] = await Promise.all([
+          supabase.rpc("track_visitor" as any, { p_hash: hash }),
+          supabase.rpc("get_online_count" as any),
+          supabase.rpc("get_subscriber_count" as any),
+        ]);
+        if (typeof trackRes.data === "number") setTotal(trackRes.data);
+        if (typeof onlineRes.data === "number") setOnline(onlineRes.data);
+        if (typeof subsRes.data === "number") setSubscribers(subsRes.data);
+      } catch {
+        setTotal((current) => current ?? 0);
+      }
     };
 
     const ping = async () => {
-      await supabase.rpc("ping_online" as any, { p_hash: hash });
-      const { data } = await supabase.rpc("get_online_count" as any);
-      if (typeof data === "number") setOnline(data);
+      try {
+        await supabase.rpc("ping_online" as any, { p_hash: hash });
+        const { data } = await supabase.rpc("get_online_count" as any);
+        if (typeof data === "number") setOnline(data);
+      } catch {
+        setOnline((current) => current ?? 0);
+      }
     };
 
     refresh();
