@@ -38,6 +38,38 @@ const FALLBACK_SLIDES: Slide[] = [
     cta_label: "Get Started",
     cta_link: "/contact",
   },
+  {
+    id: "fallback-2",
+    image_url: slideDatacenter,
+    title: "Reliable Data Center & Power Solutions",
+    caption: "Resilient infrastructure for organizations that need uptime, security, and room to grow.",
+    cta_label: "Explore Services",
+    cta_link: "/services",
+  },
+  {
+    id: "fallback-3",
+    image_url: slideSmartcity,
+    title: "Smart Infrastructure for Connected Cities",
+    caption: "Integrated networking, IoT, and safety systems designed for modern Ethiopian enterprises.",
+    cta_label: "View Solutions",
+    cta_link: "/solutions",
+  },
+  {
+    id: "fallback-4",
+    image_url: slideTower,
+    title: "Enterprise Networks Built for Scale",
+    caption: "Wireless, structured cabling, and managed network systems delivered by certified engineers.",
+    cta_label: "Talk to Us",
+    cta_link: "/contact",
+  },
+  {
+    id: "fallback-5",
+    image_url: slideNoc,
+    title: "Network & Cybersecurity Operations",
+    caption: "Practical protection, monitoring, and response services for mission-critical environments.",
+    cta_label: "Secure Your Business",
+    cta_link: "/contact",
+  },
 ];
 
 const ROTATION_MS = 5000;
@@ -51,22 +83,32 @@ export default function HeroSlideshow() {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    supabase
-      .from("site_slides" as any)
-      .select("id, image_url, title, caption, cta_label, cta_link")
-      .eq("is_active", true)
-      .order("display_order", { ascending: true })
-      .then(({ data }) => {
+    const loadSlides = async () => {
+      try {
+        const { data } = await supabase
+          .from("site_slides" as any)
+          .select("id, image_url, title, caption, cta_label, cta_link")
+          .eq("is_active", true)
+          .order("display_order", { ascending: true });
         if (data && Array.isArray(data) && data.length > 0) {
           setSlides(data as unknown as Slide[]);
         }
-      });
+      } catch {
+        setSlides(FALLBACK_SLIDES);
+      }
+    };
+
+    loadSlides();
   }, []);
 
   useEffect(() => {
     if (slides.length <= 1) return;
     const t = setInterval(() => setIndex((i) => (i + 1) % slides.length), ROTATION_MS);
     return () => clearInterval(t);
+  }, [slides.length]);
+
+  useEffect(() => {
+    setIndex((current) => (current >= slides.length ? 0 : current));
   }, [slides.length]);
 
   const slide = slides[index] ?? slides[0];

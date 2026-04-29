@@ -59,11 +59,16 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Auto-subscribe the applicant
-    await supabase.from("subscriber_emails").upsert(
-      { email: applicant_email, user_id: userId, subscribed: true },
-      { onConflict: "email" }
-    );
+    // Store applicant/subscriber identity in the public client area only.
+    await supabase.rpc("register_client_account", {
+      p_email: applicant_email,
+      p_user_id: userId,
+      p_display_name: applicant_name,
+      p_auth_provider: "google",
+      p_account_purpose: "vacancy",
+      p_is_subscriber: true,
+      p_vacancy_applicant: true,
+    });
 
     // Notify HR/CEO about new application
     const { data: executives } = await supabase

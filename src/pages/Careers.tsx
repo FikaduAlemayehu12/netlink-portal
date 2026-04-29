@@ -95,6 +95,22 @@ export default function Careers() {
   // After redirect, auto-open the vacancy the user intended to apply to
   useEffect(() => {
     if (user && !authLoading) {
+      const registerApplicant = async () => {
+        try {
+          await supabase.rpc("register_client_account" as any, {
+            p_email: user.email?.toLowerCase() || "",
+            p_user_id: user.id,
+            p_display_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+            p_auth_provider: user.app_metadata?.provider || "google",
+            p_account_purpose: "vacancy",
+            p_is_subscriber: true,
+            p_vacancy_applicant: true,
+          });
+        } catch {
+          // Public account registration should not block browsing vacancies.
+        }
+      };
+      registerApplicant();
       const pendingVacancy = localStorage.getItem("apply_vacancy_id");
       if (pendingVacancy) {
         localStorage.removeItem("apply_vacancy_id");
@@ -150,6 +166,16 @@ export default function Careers() {
 
       const applicantName = user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email || "";
       const applicantEmail = user?.email || "";
+
+      await supabase.rpc("register_client_account" as any, {
+        p_email: applicantEmail.toLowerCase(),
+        p_user_id: user.id,
+        p_display_name: applicantName,
+        p_auth_provider: user.app_metadata?.provider || "google",
+        p_account_purpose: "vacancy",
+        p_is_subscriber: true,
+        p_vacancy_applicant: true,
+      });
 
       const { error } = await supabase.functions.invoke("handle-job-application", {
         body: {
