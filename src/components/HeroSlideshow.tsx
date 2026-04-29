@@ -83,17 +83,22 @@ export default function HeroSlideshow() {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    supabase
-      .from("site_slides" as any)
-      .select("id, image_url, title, caption, cta_label, cta_link")
-      .eq("is_active", true)
-      .order("display_order", { ascending: true })
-      .then(({ data }) => {
+    const loadSlides = async () => {
+      try {
+        const { data } = await supabase
+          .from("site_slides" as any)
+          .select("id, image_url, title, caption, cta_label, cta_link")
+          .eq("is_active", true)
+          .order("display_order", { ascending: true });
         if (data && Array.isArray(data) && data.length > 0) {
           setSlides(data as unknown as Slide[]);
         }
-      })
-      .catch(() => setSlides(FALLBACK_SLIDES));
+      } catch {
+        setSlides(FALLBACK_SLIDES);
+      }
+    };
+
+    loadSlides();
   }, []);
 
   useEffect(() => {
