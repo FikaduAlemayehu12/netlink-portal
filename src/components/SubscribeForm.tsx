@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Mail, Loader2, Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
@@ -9,6 +9,31 @@ export default function SubscribeForm() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    const completePendingGoogleSubscription = async () => {
+      if (localStorage.getItem("pending_subscription") !== "google") return;
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user?.email) return;
+
+      const { error } = await supabase.rpc("register_client_account" as any, {
+        p_email: user.email.toLowerCase(),
+        p_user_id: user.id,
+        p_display_name: user.user_metadata?.full_name || user.user_metadata?.name || null,
+        p_auth_provider: "google",
+        p_account_purpose: "subscription",
+        p_is_subscriber: true,
+        p_vacancy_applicant: false,
+      });
+      if (!error) {
+        localStorage.removeItem("pending_subscription");
+        setDone(true);
+        toast({ title: "Subscribed!", description: "Your Google account is subscribed for updates." });
+      }
+    };
+
+    completePendingGoogleSubscription();
+  }, [toast]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
