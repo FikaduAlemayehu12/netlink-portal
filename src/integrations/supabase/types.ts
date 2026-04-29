@@ -2144,41 +2144,6 @@ export type Database = {
         }
         Relationships: []
       }
-      subscriber_update_notifications: {
-        Row: {
-          content_id: string
-          created_at: string
-          id: string
-          sent_at: string | null
-          status: string
-          subscriber_email: string
-        }
-        Insert: {
-          content_id: string
-          created_at?: string
-          id?: string
-          sent_at?: string | null
-          status?: string
-          subscriber_email: string
-        }
-        Update: {
-          content_id?: string
-          created_at?: string
-          id?: string
-          sent_at?: string | null
-          status?: string
-          subscriber_email?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "subscriber_update_notifications_content_id_fkey"
-            columns: ["content_id"]
-            isOneToOne: false
-            referencedRelation: "site_content"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       support_tickets: {
         Row: {
           assigned_to: string | null
