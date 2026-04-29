@@ -159,6 +159,10 @@ export default function Careers() {
   };
 
   const submitApplication = async (vacancy: Vacancy) => {
+    if (isStaffAccount) {
+      toast({ title: "Staff account detected", description: "Vacancy applications must use a public applicant account.", variant: "destructive" });
+      return;
+    }
     if (!form.message.trim()) {
       toast({ title: "Cover letter required", description: "Please write a brief cover letter", variant: "destructive" });
       return;
