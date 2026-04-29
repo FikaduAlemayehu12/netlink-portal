@@ -7,6 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export default function StaffLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,8 +23,6 @@ export default function StaffLogin() {
     if (!authLoading && user) {
       if (roles.length > 0) {
         navigate({ to: "/staff/dashboard", replace: true });
-      } else {
-        navigate({ to: "/portal", replace: true });
       }
     }
   }, [user, roles, authLoading, navigate]);
@@ -50,16 +50,25 @@ export default function StaffLogin() {
         // Verify the user actually has a staff role before sending them to staff portal
         const { data: { user: signedIn } } = await supabase.auth.getUser();
         if (signedIn) {
-          const { data: rolesData } = await supabase
-            .from("user_roles")
-            .select("role")
-            .eq("user_id", signedIn.id);
+          let rolesData: { role: string }[] | null = null;
+          let roleError: unknown = null;
+          for (let attempt = 0; attempt < 4; attempt += 1) {
+            const { data, error } = await supabase
+              .from("user_roles")
+              .select("role")
+              .eq("user_id", signedIn.id);
+            rolesData = data;
+            roleError = error;
+            if (!error) break;
+            await wait(450 * (attempt + 1));
+          }
+          if (roleError) throw roleError;
           if (rolesData && rolesData.length > 0) {
-            window.location.href = "/staff/dashboard";
+            navigate({ to: "/staff/dashboard", replace: true });
           } else {
             // Not staff — sign out and show error
             await supabase.auth.signOut();
-            setError("This account does not have staff access. Please use the Careers page to sign in as an applicant.");
+            setError("This account does not have staff access. Please use the public Careers page for applications.");
             setLoading(false);
           }
         }

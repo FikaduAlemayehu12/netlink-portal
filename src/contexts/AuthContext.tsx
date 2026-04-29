@@ -29,6 +29,21 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function withRetry<T>(operation: () => Promise<T>, attempts = 3): Promise<T> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error;
+      await wait(350 * (attempt + 1));
+    }
+  }
+  throw lastError;
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
@@ -37,18 +52,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async (userId: string) => {
-    const { data } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("user_id", userId)
-      .maybeSingle();
+    setRoles([]);
+    const { data } = await withRetry(async () => {
+      const result = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("user_id", userId)
+        .maybeSingle();
+      if (result.error) throw result.error;
+      return result;
+    });
     if (data) setProfile(data as Profile);
 
-    const { data: rolesData } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", userId);
-    if (rolesData) setRoles(rolesData.map((r) => r.role as AppRole));
+    const { data: rolesData } = await withRetry(async () => {
+      const result = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId);
+      if (result.error) throw result.error;
+      return result;
+    });
+    setRoles((rolesData || []).map((r) => r.role as AppRole));
   };
 
   const refreshProfile = async () => {
@@ -63,7 +87,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(session?.user ?? null);
         if (session?.user) {
           // Don't await - let it run in background to avoid blocking auth flow
-          fetchProfile(session.user.id).then(() => setLoading(false));
+          fetchProfile(session.user.id).catch(console.error).then(() => setLoading(false));
         } else {
           setProfile(null);
           setRoles([]);

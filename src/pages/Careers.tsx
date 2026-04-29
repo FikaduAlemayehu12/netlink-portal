@@ -49,6 +49,7 @@ export default function Careers() {
   const [submittedIds, setSubmittedIds] = useState<Set<string>>(new Set());
   const [signingIn, setSigningIn] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [isStaffAccount, setIsStaffAccount] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -97,6 +98,16 @@ export default function Careers() {
     if (user && !authLoading) {
       const registerApplicant = async () => {
         try {
+          const { data: staffRoles } = await supabase
+            .from("user_roles")
+            .select("role")
+            .eq("user_id", user.id);
+          if (staffRoles && staffRoles.length > 0) {
+            setIsStaffAccount(true);
+            localStorage.removeItem("apply_vacancy_id");
+            return;
+          }
+          setIsStaffAccount(false);
           await supabase.rpc("register_client_account" as any, {
             p_email: user.email?.toLowerCase() || "",
             p_user_id: user.id,
@@ -121,6 +132,10 @@ export default function Careers() {
   }, [user, authLoading]);
 
   const handleApplyClick = (vacancyId: string) => {
+    if (isStaffAccount) {
+      toast({ title: "Staff account detected", description: "Please sign out and use a public applicant account to apply for vacancies." });
+      return;
+    }
     if (!user) {
       handleGoogleSignIn(vacancyId);
     } else {
@@ -144,6 +159,10 @@ export default function Careers() {
   };
 
   const submitApplication = async (vacancy: Vacancy) => {
+    if (isStaffAccount) {
+      toast({ title: "Staff account detected", description: "Vacancy applications must use a public applicant account.", variant: "destructive" });
+      return;
+    }
     if (!form.message.trim()) {
       toast({ title: "Cover letter required", description: "Please write a brief cover letter", variant: "destructive" });
       return;
