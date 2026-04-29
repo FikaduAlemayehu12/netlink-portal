@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { Link, Navigate, useLocation, useNavigate } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Network, LayoutDashboard, FileText, Users, Trophy, FolderKanban,
@@ -79,7 +79,7 @@ function setLastVisit(module: string) {
 }
 
 export default function StaffLayout({ children }: { children: React.ReactNode }) {
-  const { profile, roles, isCeo, signOut } = useAuth();
+  const { user, profile, roles, isCeo, loading, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -147,6 +147,17 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
   const handleSignOut = async () => { await signOut(); navigate({ to: "/staff/login" }); };
 
   const primaryRole = roles[0] as AppRole | undefined;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="w-10 h-10 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!user) return <Navigate to="/staff/login" replace />;
+  if (roles.length === 0) return <Navigate to="/careers" replace />;
 
   const renderNavItem = ({ label, path, icon: Icon, module }: NavItem) => {
     const isActive = location.pathname === path;
