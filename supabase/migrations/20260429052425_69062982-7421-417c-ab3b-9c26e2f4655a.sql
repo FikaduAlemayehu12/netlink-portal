@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "Anyone can update own subscription email" ON public.subscriber_emails;
