@@ -221,6 +221,48 @@ export type Database = {
         }
         Relationships: []
       }
+      client_accounts: {
+        Row: {
+          account_purpose: string
+          auth_provider: string
+          created_at: string
+          display_name: string | null
+          email: string
+          id: string
+          is_subscriber: boolean
+          last_seen_at: string
+          updated_at: string
+          user_id: string | null
+          vacancy_applicant: boolean
+        }
+        Insert: {
+          account_purpose?: string
+          auth_provider?: string
+          created_at?: string
+          display_name?: string | null
+          email: string
+          id?: string
+          is_subscriber?: boolean
+          last_seen_at?: string
+          updated_at?: string
+          user_id?: string | null
+          vacancy_applicant?: boolean
+        }
+        Update: {
+          account_purpose?: string
+          auth_provider?: string
+          created_at?: string
+          display_name?: string | null
+          email?: string
+          id?: string
+          is_subscriber?: boolean
+          last_seen_at?: string
+          updated_at?: string
+          user_id?: string | null
+          vacancy_applicant?: boolean
+        }
+        Relationships: []
+      }
       content_comments: {
         Row: {
           author_name: string
@@ -2102,6 +2144,41 @@ export type Database = {
         }
         Relationships: []
       }
+      subscriber_update_notifications: {
+        Row: {
+          content_id: string
+          created_at: string
+          id: string
+          sent_at: string | null
+          status: string
+          subscriber_email: string
+        }
+        Insert: {
+          content_id: string
+          created_at?: string
+          id?: string
+          sent_at?: string | null
+          status?: string
+          subscriber_email: string
+        }
+        Update: {
+          content_id?: string
+          created_at?: string
+          id?: string
+          sent_at?: string | null
+          status?: string
+          subscriber_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriber_update_notifications_content_id_fkey"
+            columns: ["content_id"]
+            isOneToOne: false
+            referencedRelation: "site_content"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       support_tickets: {
         Row: {
           assigned_to: string | null
@@ -2283,6 +2360,36 @@ export type Database = {
       }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
       ping_online: { Args: { p_hash: string }; Returns: undefined }
+      register_client_account: {
+        Args: {
+          p_account_purpose?: string
+          p_auth_provider?: string
+          p_display_name?: string
+          p_email: string
+          p_is_subscriber?: boolean
+          p_user_id?: string
+          p_vacancy_applicant?: boolean
+        }
+        Returns: {
+          account_purpose: string
+          auth_provider: string
+          created_at: string
+          display_name: string | null
+          email: string
+          id: string
+          is_subscriber: boolean
+          last_seen_at: string
+          updated_at: string
+          user_id: string | null
+          vacancy_applicant: boolean
+        }
+        SetofOptions: {
+          from: "*"
+          to: "client_accounts"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       track_visitor: { Args: { p_hash: string }; Returns: number }
     }
     Enums: {
