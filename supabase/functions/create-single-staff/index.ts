@@ -44,7 +44,7 @@ serve(async (req) => {
     // Create auth user with default password
     const { data: newUser, error: createError } = await adminClient.auth.admin.createUser({
       email,
-      password: "netlink123",
+      password: "netlink@123",
       email_confirm: true,
       user_metadata: { full_name },
     });
@@ -56,7 +56,7 @@ serve(async (req) => {
     await adminClient.from("profiles").update({ position, full_name }).eq("user_id", userId);
 
     // Set must_change_password
-    await adminClient.from("profiles").update({ must_change_password: true }).eq("user_id", userId);
+    await adminClient.from("profiles").update({ must_change_password: false }).eq("user_id", userId);
 
     // Assign roles
     const rolesToInsert = (roles || ["staff"]).map((role: string) => ({ user_id: userId, role }));
