@@ -188,7 +188,7 @@ export default function AdminUsers() {
   };
 
   const resetPassword = async (userId: string, email: string) => {
-    if (!confirm(`Reset password for ${email} to default "netlink123"?`)) return;
+    if (!confirm(`Reset password for ${email} to default "netlink@123"?`)) return;
     const { data: sessionData } = await supabase.auth.getSession();
     const token = sessionData?.session?.access_token;
     const res = await supabase.functions.invoke("reset-staff-password", {
@@ -324,7 +324,7 @@ export default function AdminUsers() {
 
                       <div className="p-3 bg-muted rounded-lg text-xs text-muted-foreground">
                         <Shield className="w-3.5 h-3.5 inline mr-1.5" />
-                        Default password: <strong className="font-mono text-foreground">netlink123</strong> — user must change it on first login.
+                        Default password: <strong className="font-mono text-foreground">netlink@123</strong> — staff access is active after account creation.
                       </div>
                       <div className="flex gap-3">
                         <Button variant="outline" onClick={() => setShowCreate(false)} className="flex-1">Cancel</Button>

@@ -38,6 +38,8 @@ const benefitsList = [
   { icon: Briefcase, label: "Impact", desc: "Shape Ethiopia's technological future every day" },
 ];
 
+const isCompanyStaffEmail = (email?: string | null) => !!email?.toLowerCase().endsWith("@netlink-gs.com");
+
 export default function Careers() {
   const { toast } = useToast();
   const [vacancies, setVacancies] = useState<Vacancy[]>([]);
@@ -103,6 +105,11 @@ export default function Careers() {
             .select("role")
             .eq("user_id", user.id);
           if (staffRoles && staffRoles.length > 0) {
+            setIsStaffAccount(true);
+            localStorage.removeItem("apply_vacancy_id");
+            return;
+          }
+          if (isCompanyStaffEmail(user.email)) {
             setIsStaffAccount(true);
             localStorage.removeItem("apply_vacancy_id");
             return;
@@ -185,6 +192,11 @@ export default function Careers() {
 
       const applicantName = user?.user_metadata?.full_name || user?.user_metadata?.name || user?.email || "";
       const applicantEmail = user?.email || "";
+      if (isCompanyStaffEmail(applicantEmail)) {
+        toast({ title: "Staff account detected", description: "Please use the Staff Portal instead of Careers signup.", variant: "destructive" });
+        setSubmitting(false);
+        return;
+      }
 
       await supabase.rpc("register_client_account" as any, {
         p_email: applicantEmail.toLowerCase(),
