@@ -53,6 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchProfile = async (userId: string) => {
     setRoles([]);
+    setProfile(null);
     const { data } = await withRetry(async () => {
       const result = await supabase
         .from("profiles")
@@ -116,7 +117,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const isCeo = roles.includes("ceo");
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (!error && data.user) {
+      setLoading(true);
+      setSession(data.session);
+      setUser(data.user);
+      await fetchProfile(data.user.id);
+      setLoading(false);
+    }
     return { error };
   };
 
