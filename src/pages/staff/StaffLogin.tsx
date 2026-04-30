@@ -15,7 +15,7 @@ export default function StaffLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { user, roles, loading: authLoading } = useAuth();
+  const { user, roles, loading: authLoading, signIn } = useAuth();
   const navigate = useNavigate();
 
   // If already logged in, redirect: staff → dashboard; client (no roles) → portal
@@ -39,10 +39,7 @@ export default function StaffLogin() {
       // Sign out any existing session first to avoid lock issues
       await supabase.auth.signOut();
       
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const { error: signInError } = await signIn(email.trim().toLowerCase(), password);
       if (signInError) {
         setError("Invalid credentials. Please check your email and password.");
         setLoading(false);
@@ -52,7 +49,7 @@ export default function StaffLogin() {
         if (signedIn) {
           let rolesData: { role: string }[] | null = null;
           let roleError: unknown = null;
-          for (let attempt = 0; attempt < 4; attempt += 1) {
+          for (let attempt = 0; attempt < 8; attempt += 1) {
             const { data, error } = await supabase
               .from("user_roles")
               .select("role")
@@ -60,7 +57,7 @@ export default function StaffLogin() {
             rolesData = data;
             roleError = error;
             if (!error) break;
-            await wait(450 * (attempt + 1));
+            await wait(500 * (attempt + 1));
           }
           if (roleError) throw roleError;
           if (rolesData && rolesData.length > 0) {

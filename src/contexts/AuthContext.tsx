@@ -31,14 +31,14 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-async function withRetry<T>(operation: () => Promise<T>, attempts = 3): Promise<T> {
+async function withRetry<T>(operation: () => Promise<T>, attempts = 8): Promise<T> {
   let lastError: unknown;
   for (let attempt = 0; attempt < attempts; attempt += 1) {
     try {
       return await operation();
     } catch (error) {
       lastError = error;
-      await wait(350 * (attempt + 1));
+      await wait(500 * (attempt + 1));
     }
   }
   throw lastError;
@@ -53,6 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchProfile = async (userId: string) => {
     setRoles([]);
+    setProfile(null);
     const { data } = await withRetry(async () => {
       const result = await supabase
         .from("profiles")
@@ -116,7 +117,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const isCeo = roles.includes("ceo");
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (!error && data.user) {
+      setLoading(true);
+      setSession(data.session);
+      setUser(data.user);
+      await fetchProfile(data.user.id).catch(console.error);
+      setLoading(false);
+    }
     return { error };
   };
 

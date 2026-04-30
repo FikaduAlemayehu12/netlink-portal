@@ -2310,6 +2310,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_manage_staff_accounts: {
+        Args: { _user_id: string }
+        Returns: boolean
+      }
       get_online_count: { Args: never; Returns: number }
       get_subscriber_count: { Args: never; Returns: number }
       has_module_permission: {
