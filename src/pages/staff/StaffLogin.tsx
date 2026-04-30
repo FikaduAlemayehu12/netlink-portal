@@ -15,7 +15,7 @@ export default function StaffLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { user, roles, loading: authLoading } = useAuth();
+  const { user, roles, loading: authLoading, signIn } = useAuth();
   const navigate = useNavigate();
 
   // If already logged in, redirect: staff → dashboard; client (no roles) → portal
@@ -39,10 +39,7 @@ export default function StaffLogin() {
       // Sign out any existing session first to avoid lock issues
       await supabase.auth.signOut();
       
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const { error: signInError } = await signIn(email.trim().toLowerCase(), password);
       if (signInError) {
         setError("Invalid credentials. Please check your email and password.");
         setLoading(false);
