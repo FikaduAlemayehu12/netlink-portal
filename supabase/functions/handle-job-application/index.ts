@@ -35,6 +35,29 @@ Deno.serve(async (req) => {
       userId = user?.id || null;
     }
 
+    const normalizedEmail = String(applicant_email).trim().toLowerCase();
+    if (normalizedEmail.endsWith("@netlink-gs.com")) {
+      return new Response(JSON.stringify({ error: "Staff accounts must use the Staff Portal, not Careers applications" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (userId) {
+      const { data: staffRole } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId)
+        .limit(1)
+        .maybeSingle();
+      if (staffRole) {
+        return new Response(JSON.stringify({ error: "Staff accounts cannot submit public Careers applications" }), {
+          status: 403,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
     // Insert the application
     const { data: app, error: insertError } = await supabase
       .from("job_applications")
