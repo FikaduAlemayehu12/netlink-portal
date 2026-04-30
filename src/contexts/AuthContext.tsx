@@ -31,14 +31,14 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-async function withRetry<T>(operation: () => Promise<T>, attempts = 3): Promise<T> {
+async function withRetry<T>(operation: () => Promise<T>, attempts = 8): Promise<T> {
   let lastError: unknown;
   for (let attempt = 0; attempt < attempts; attempt += 1) {
     try {
       return await operation();
     } catch (error) {
       lastError = error;
-      await wait(350 * (attempt + 1));
+      await wait(500 * (attempt + 1));
     }
   }
   throw lastError;
@@ -122,7 +122,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(true);
       setSession(data.session);
       setUser(data.user);
-      await fetchProfile(data.user.id);
+      await fetchProfile(data.user.id).catch(console.error);
       setLoading(false);
     }
     return { error };
