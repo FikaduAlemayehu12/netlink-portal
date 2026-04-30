@@ -10,11 +10,18 @@ export default function SubscribeForm() {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
 
+  const isCompanyStaffEmail = (value?: string | null) => !!value?.toLowerCase().endsWith("@netlink-gs.com");
+
   useEffect(() => {
     const completePendingGoogleSubscription = async () => {
       if (localStorage.getItem("pending_subscription") !== "google") return;
       const { data: { user } } = await supabase.auth.getUser();
       if (!user?.email) return;
+      if (isCompanyStaffEmail(user.email)) {
+        localStorage.removeItem("pending_subscription");
+        toast({ title: "Staff account detected", description: "Please use the Staff Portal for company accounts.", variant: "destructive" });
+        return;
+      }
 
       const { error } = await supabase.rpc("register_client_account" as any, {
         p_email: user.email.toLowerCase(),
@@ -39,6 +46,10 @@ export default function SubscribeForm() {
     e.preventDefault();
     if (!email.trim() || !email.includes("@")) {
       toast({ title: "Invalid email", variant: "destructive" });
+      return;
+    }
+    if (isCompanyStaffEmail(email)) {
+      toast({ title: "Staff account detected", description: "Company staff should use the Staff Portal, not public subscriptions.", variant: "destructive" });
       return;
     }
     setLoading(true);
