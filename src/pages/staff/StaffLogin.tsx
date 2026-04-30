@@ -49,7 +49,7 @@ export default function StaffLogin() {
         if (signedIn) {
           let rolesData: { role: string }[] | null = null;
           let roleError: unknown = null;
-          for (let attempt = 0; attempt < 4; attempt += 1) {
+          for (let attempt = 0; attempt < 8; attempt += 1) {
             const { data, error } = await supabase
               .from("user_roles")
               .select("role")
@@ -57,7 +57,7 @@ export default function StaffLogin() {
             rolesData = data;
             roleError = error;
             if (!error) break;
-            await wait(450 * (attempt + 1));
+            await wait(500 * (attempt + 1));
           }
           if (roleError) throw roleError;
           if (rolesData && rolesData.length > 0) {
