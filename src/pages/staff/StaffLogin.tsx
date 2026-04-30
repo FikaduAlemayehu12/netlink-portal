@@ -30,7 +30,8 @@ export default function StaffLogin() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    if (!email.endsWith("@netlink-gs.com")) {
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail.endsWith("@netlink-gs.com")) {
       setError("Please use your official company email (firstname@netlink-gs.com)");
       return;
     }
@@ -39,7 +40,7 @@ export default function StaffLogin() {
       // Sign out any existing session first to avoid lock issues
       await supabase.auth.signOut();
       
-      const { error: signInError } = await signIn(email.trim().toLowerCase(), password);
+      const { error: signInError } = await signIn(normalizedEmail, password);
       if (signInError) {
         setError("Invalid credentials. Please check your email and password.");
         setLoading(false);
