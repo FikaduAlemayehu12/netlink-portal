@@ -1391,6 +1391,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          account_status: string
           avatar_url: string | null
           bio: string | null
           created_at: string
@@ -1403,6 +1404,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          account_status?: string
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
@@ -1415,6 +1417,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          account_status?: string
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
@@ -2017,6 +2020,33 @@ export type Database = {
         }
         Relationships: []
       }
+      staff_module_actions: {
+        Row: {
+          action: string
+          created_at: string
+          granted_by: string | null
+          id: string
+          module: string
+          user_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          granted_by?: string | null
+          id?: string
+          module: string
+          user_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          granted_by?: string | null
+          id?: string
+          module?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       staff_permissions: {
         Row: {
           can_create_staff: boolean | null
@@ -2310,6 +2340,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_action: {
+        Args: { _action: string; _module: string; _user_id: string }
+        Returns: boolean
+      }
       can_manage_staff_accounts: {
         Args: { _user_id: string }
         Returns: boolean
