@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ROLE_LABELS } from "@/lib/supabase";
 import type { AppRole } from "@/lib/supabase";
+import { useMyPermissions } from "@/hooks/usePermissions";
 
 type NavItem = { label: string; path: string; icon: any; module?: string };
 
@@ -80,6 +81,7 @@ function setLastVisit(module: string) {
 
 export default function StaffLayout({ children }: { children: React.ReactNode }) {
   const { user, profile, roles, isCeo, loading, signOut } = useAuth();
+  const { can, loaded: permsLoaded } = useMyPermissions();
   const location = useLocation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -189,14 +191,18 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
       </div>
 
       <nav className="flex-1 px-2 py-4 space-y-0.5 overflow-y-auto">
-        {navItems.map(renderNavItem)}
+        {navItems.filter((i) => !i.module || isCeo || can(i.module, "view")).map(renderNavItem)}
 
-        {isCeo && (
-          <>
-            <div className="pt-4 pb-1 px-3 text-[10px] font-heading tracking-widest text-sidebar-foreground/40 uppercase">Administration</div>
-            {adminItems.map(renderNavItem)}
-          </>
-        )}
+        {(() => {
+          const visibleAdmin = adminItems.filter((i) => isCeo || (i.module && can(i.module, "view")));
+          if (visibleAdmin.length === 0) return null;
+          return (
+            <>
+              <div className="pt-4 pb-1 px-3 text-[10px] font-heading tracking-widest text-sidebar-foreground/40 uppercase">Administration</div>
+              {visibleAdmin.map(renderNavItem)}
+            </>
+          );
+        })()}
       </nav>
 
       <div className="border-t border-sidebar-border p-3">
