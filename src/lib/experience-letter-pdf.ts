@@ -213,7 +213,7 @@ export function generateExperienceLetterHTML(data: ExperienceLetterPDFData): str
       </div>
       <div class="letter-title">${letterTypeDisplay} Letter</div>
       <div class="letter-body">${bodyHtml}</div>
-      ${statsHtml}
+
       <div class="signature-section">
         <div class="sig-block">
           <div class="sig-line">
