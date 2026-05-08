@@ -74,9 +74,7 @@ export function generateExperienceLetterHTML(data: ExperienceLetterPDFData): str
   const cleanedContent = cleanContent(data.content || "");
   const bodyHtml = paragraphs(cleanedContent);
 
-  // Zigzag SVG mask data URI — creates triangular sawtooth bottom edge
-  const zigzagBottom = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6' preserveAspectRatio='none'><polygon points='0,0 100,0 100,2 95,6 90,2 85,6 80,2 75,6 70,2 65,6 60,2 55,6 50,2 45,6 40,2 35,6 30,2 25,6 20,2 15,6 10,2 5,6 0,2' fill='black'/></svg>`)}`;
-  const zigzagTop = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6' preserveAspectRatio='none'><polygon points='0,6 100,6 100,4 95,0 90,4 85,0 80,4 75,0 70,4 65,0 60,4 55,0 50,4 45,0 40,4 35,0 30,4 25,0 20,4 15,0 10,4 5,0 0,4' fill='black'/></svg>`)}`;
+  // (zigzag header/footer edges removed — straight clean edges per latest spec)
 
   const styles = `
     *{margin:0;padding:0;box-sizing:border-box}
@@ -87,8 +85,8 @@ export function generateExperienceLetterHTML(data: ExperienceLetterPDFData): str
     .watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-size:90px;color:rgba(0,179,107,0.05);font-weight:900;white-space:nowrap;z-index:0;pointer-events:none;letter-spacing:8px;text-transform:uppercase}
     .content-wrapper{position:relative;z-index:1}
 
-    /* ===== RUNNING (every-page) HEADER & FOOTER — slim, zigzag, brand gradient ===== */
-    .page-header{position:fixed;top:0;left:0;right:0;height:16mm;background-image:${BRAND.gradient};background-color:#0084D1;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14mm;z-index:100;-webkit-mask-image:url("${zigzagBottom}");mask-image:url("${zigzagBottom}");-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;box-shadow:0 2px 8px rgba(0,132,209,0.25)}
+    /* ===== RUNNING (every-page) HEADER & FOOTER — slim, brand gradient, clean edges ===== */
+    .page-header{position:fixed;top:0;left:0;right:0;height:16mm;background-image:${BRAND.gradient};background-color:#0084D1;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14mm;z-index:100;box-shadow:0 2px 8px rgba(0,132,209,0.25)}
     .page-header .left{display:flex;align-items:center;gap:8px}
     .page-header .left img{height:28px;width:28px;background:#fff;border-radius:6px;padding:3px;box-shadow:0 1px 4px rgba(0,0,0,0.18)}
     .page-header .left .brand{line-height:1.1}
@@ -97,7 +95,7 @@ export function generateExperienceLetterHTML(data: ExperienceLetterPDFData): str
     .page-header .right{text-align:right;font-size:8.5px;line-height:1.35;opacity:0.96;font-family:'Helvetica',Arial,sans-serif}
     .page-header .right .ref{font-weight:700;font-size:9.5px;letter-spacing:0.3px}
 
-    .page-footer{position:fixed;bottom:0;left:0;right:0;height:12mm;background-image:${BRAND.gradient};background-color:#00B36B;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14mm;z-index:100;font-size:8.5px;font-family:'Helvetica',Arial,sans-serif;-webkit-mask-image:url("${zigzagTop}");mask-image:url("${zigzagTop}");-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;box-shadow:0 -2px 8px rgba(0,179,107,0.25)}
+    .page-footer{position:fixed;bottom:0;left:0;right:0;height:12mm;background-image:${BRAND.gradient};background-color:#00B36B;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14mm;z-index:100;font-size:8.5px;font-family:'Helvetica',Arial,sans-serif;box-shadow:0 -2px 8px rgba(0,179,107,0.25)}
     .page-footer .meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .page-footer .meta span{white-space:nowrap}
     .page-footer .sep{opacity:0.6}
@@ -143,16 +141,7 @@ export function generateExperienceLetterHTML(data: ExperienceLetterPDFData): str
     }
   `;
 
-  const statsHtml = data.generatedData?.statistics ? `
-    <div class="stats-grid">
-      <div class="stat-item"><div class="stat-value">${data.generatedData.statistics.projectsParticipated || 0}</div><div class="stat-label">Projects</div></div>
-      <div class="stat-item"><div class="stat-value">${data.generatedData.statistics.tasksCompleted || 0}</div><div class="stat-label">Tasks Completed</div></div>
-      <div class="stat-item"><div class="stat-value">${data.generatedData.statistics.ticketsResolved || 0}</div><div class="stat-label">Tickets Resolved</div></div>
-      <div class="stat-item"><div class="stat-value">${data.generatedData.statistics.totalWorkHours || 0}</div><div class="stat-label">Work Hours</div></div>
-      <div class="stat-item"><div class="stat-value">${data.generatedData.statistics.attendanceDays || 0}</div><div class="stat-label">Attendance Days</div></div>
-      <div class="stat-item"><div class="stat-value">${data.generatedData.statistics.averagePerformanceGrade || 0}</div><div class="stat-label">Avg Grade</div></div>
-    </div>
-  ` : "";
+  // Stats grid removed — profile/performance details are now woven into the letter body paragraph.
 
   const auditTrailHtml = (data.approvalAudit && data.approvalAudit.length > 0) ? `
     <div class="audit-trail">
@@ -215,7 +204,7 @@ export function generateExperienceLetterHTML(data: ExperienceLetterPDFData): str
       </div>
       <div class="letter-title">${letterTypeDisplay} Letter</div>
       <div class="letter-body">${bodyHtml}</div>
-      ${statsHtml}
+
       <div class="signature-section">
         <div class="sig-block">
           <div class="sig-line">
