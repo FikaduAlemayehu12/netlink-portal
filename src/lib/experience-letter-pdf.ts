@@ -141,16 +141,7 @@ export function generateExperienceLetterHTML(data: ExperienceLetterPDFData): str
     }
   `;
 
-  const statsHtml = data.generatedData?.statistics ? `
-    <div class="stats-grid">
-      <div class="stat-item"><div class="stat-value">${data.generatedData.statistics.projectsParticipated || 0}</div><div class="stat-label">Projects</div></div>
-      <div class="stat-item"><div class="stat-value">${data.generatedData.statistics.tasksCompleted || 0}</div><div class="stat-label">Tasks Completed</div></div>
-      <div class="stat-item"><div class="stat-value">${data.generatedData.statistics.ticketsResolved || 0}</div><div class="stat-label">Tickets Resolved</div></div>
-      <div class="stat-item"><div class="stat-value">${data.generatedData.statistics.totalWorkHours || 0}</div><div class="stat-label">Work Hours</div></div>
-      <div class="stat-item"><div class="stat-value">${data.generatedData.statistics.attendanceDays || 0}</div><div class="stat-label">Attendance Days</div></div>
-      <div class="stat-item"><div class="stat-value">${data.generatedData.statistics.averagePerformanceGrade || 0}</div><div class="stat-label">Avg Grade</div></div>
-    </div>
-  ` : "";
+  // Stats grid removed — profile/performance details are now woven into the letter body paragraph.
 
   const auditTrailHtml = (data.approvalAudit && data.approvalAudit.length > 0) ? `
     <div class="audit-trail">
