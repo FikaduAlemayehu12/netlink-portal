@@ -161,21 +161,11 @@ Write a comprehensive, formal experience letter that highlights the employee's c
     if (!aiContent) {
       aiContent = `To Whom It May Concern,
 
-This is to certify that ${generatedData.staffName} has been employed at Netlink General Solutions PLC as ${generatedData.position}${generatedData.department ? ` in the ${generatedData.department} department` : ""}.
+This is to certify that ${generatedData.staffName} has been employed at Netlink General Solutions PLC as ${generatedData.position}${generatedData.department ? ` in the ${generatedData.department} department` : ""} from ${generatedData.periodStart || "the date of hire"} to ${generatedData.periodEnd}.
 
-Period of Employment: ${generatedData.periodStart || "N/A"} to ${generatedData.periodEnd}.
+During this period, ${generatedData.staffName} contributed to ${generatedData.statistics.projectsParticipated} project(s), completed ${generatedData.statistics.tasksCompleted} of ${generatedData.statistics.totalTasks} assigned task(s), and handled ${generatedData.statistics.ticketsHandled} support ticket(s) — resolving ${generatedData.statistics.ticketsResolved} of them. They submitted ${generatedData.statistics.plansSubmitted} plan(s) (${generatedData.statistics.plansCompleted} completed), logged ${generatedData.statistics.totalWorkHours} work hours across ${generatedData.statistics.attendanceDays} attendance day(s), and maintained an average performance grade of ${generatedData.statistics.averagePerformanceGrade}.
 
-During their tenure, ${generatedData.staffName} has demonstrated the following achievements:
-
-Participated in ${generatedData.statistics.projectsParticipated} project(s).
-Completed ${generatedData.statistics.tasksCompleted} task(s) out of ${generatedData.statistics.totalTasks} assigned.
-Handled ${generatedData.statistics.ticketsHandled} support ticket(s), of which ${generatedData.statistics.ticketsResolved} were resolved.
-Logged ${generatedData.statistics.totalWorkHours} total work hours across ${generatedData.statistics.attendanceDays} attendance days.
-Achieved an average performance grade of ${generatedData.statistics.averagePerformanceGrade}.
-
-Throughout the engagement, the employee has shown professionalism, reliability, and a consistent commitment to delivering quality work.
-
-We wish them continued success in their future endeavors.
+Throughout the engagement, ${generatedData.staffName} demonstrated professionalism, reliability, and a consistent commitment to delivering quality work. We wish them continued success in their future endeavors.
 
 Sincerely,
 Netlink General Solutions PLC`;
