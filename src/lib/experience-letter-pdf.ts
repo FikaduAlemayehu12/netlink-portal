@@ -74,9 +74,7 @@ export function generateExperienceLetterHTML(data: ExperienceLetterPDFData): str
   const cleanedContent = cleanContent(data.content || "");
   const bodyHtml = paragraphs(cleanedContent);
 
-  // Zigzag SVG mask data URI — creates triangular sawtooth bottom edge
-  const zigzagBottom = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6' preserveAspectRatio='none'><polygon points='0,0 100,0 100,2 95,6 90,2 85,6 80,2 75,6 70,2 65,6 60,2 55,6 50,2 45,6 40,2 35,6 30,2 25,6 20,2 15,6 10,2 5,6 0,2' fill='black'/></svg>`)}`;
-  const zigzagTop = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6' preserveAspectRatio='none'><polygon points='0,6 100,6 100,4 95,0 90,4 85,0 80,4 75,0 70,4 65,0 60,4 55,0 50,4 45,0 40,4 35,0 30,4 25,0 20,4 15,0 10,4 5,0 0,4' fill='black'/></svg>`)}`;
+  // (zigzag header/footer edges removed — straight clean edges per latest spec)
 
   const styles = `
     *{margin:0;padding:0;box-sizing:border-box}
