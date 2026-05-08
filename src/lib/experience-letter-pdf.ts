@@ -85,8 +85,8 @@ export function generateExperienceLetterHTML(data: ExperienceLetterPDFData): str
     .watermark{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-size:90px;color:rgba(0,179,107,0.05);font-weight:900;white-space:nowrap;z-index:0;pointer-events:none;letter-spacing:8px;text-transform:uppercase}
     .content-wrapper{position:relative;z-index:1}
 
-    /* ===== RUNNING (every-page) HEADER & FOOTER — slim, zigzag, brand gradient ===== */
-    .page-header{position:fixed;top:0;left:0;right:0;height:16mm;background-image:${BRAND.gradient};background-color:#0084D1;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14mm;z-index:100;-webkit-mask-image:url("${zigzagBottom}");mask-image:url("${zigzagBottom}");-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;box-shadow:0 2px 8px rgba(0,132,209,0.25)}
+    /* ===== RUNNING (every-page) HEADER & FOOTER — slim, brand gradient, clean edges ===== */
+    .page-header{position:fixed;top:0;left:0;right:0;height:16mm;background-image:${BRAND.gradient};background-color:#0084D1;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14mm;z-index:100;box-shadow:0 2px 8px rgba(0,132,209,0.25)}
     .page-header .left{display:flex;align-items:center;gap:8px}
     .page-header .left img{height:28px;width:28px;background:#fff;border-radius:6px;padding:3px;box-shadow:0 1px 4px rgba(0,0,0,0.18)}
     .page-header .left .brand{line-height:1.1}
@@ -95,7 +95,7 @@ export function generateExperienceLetterHTML(data: ExperienceLetterPDFData): str
     .page-header .right{text-align:right;font-size:8.5px;line-height:1.35;opacity:0.96;font-family:'Helvetica',Arial,sans-serif}
     .page-header .right .ref{font-weight:700;font-size:9.5px;letter-spacing:0.3px}
 
-    .page-footer{position:fixed;bottom:0;left:0;right:0;height:12mm;background-image:${BRAND.gradient};background-color:#00B36B;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14mm;z-index:100;font-size:8.5px;font-family:'Helvetica',Arial,sans-serif;-webkit-mask-image:url("${zigzagTop}");mask-image:url("${zigzagTop}");-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;box-shadow:0 -2px 8px rgba(0,179,107,0.25)}
+    .page-footer{position:fixed;bottom:0;left:0;right:0;height:12mm;background-image:${BRAND.gradient};background-color:#00B36B;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14mm;z-index:100;font-size:8.5px;font-family:'Helvetica',Arial,sans-serif;box-shadow:0 -2px 8px rgba(0,179,107,0.25)}
     .page-footer .meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .page-footer .meta span{white-space:nowrap}
     .page-footer .sep{opacity:0.6}
