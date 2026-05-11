@@ -69,7 +69,6 @@ function PublicLayout({ children }: { children: ReactNode }) {
       <Navbar />
       {children}
       <Footer />
-      <ChatBot />
     </>
   );
 }
@@ -81,9 +80,13 @@ function RootComponent() {
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <AuthProvider>
-            <Outlet />
-          </AuthProvider>
+          <LanguageProvider>
+            <AuthProvider>
+              <Outlet />
+              <NetlinkAssistant />
+              <FloatingHelp />
+            </AuthProvider>
+          </LanguageProvider>
         </TooltipProvider>
       </QueryClientProvider>
     </RootDocument>
