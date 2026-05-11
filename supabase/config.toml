@@ -1,1 +1,4 @@
 project_id = "oadpoidbtvsrityymwil"
+
+[functions.netlink-assistant]
+verify_jwt = false

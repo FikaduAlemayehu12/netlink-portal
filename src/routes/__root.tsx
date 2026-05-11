@@ -7,7 +7,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import ChatBot from "@/components/ChatBot";
+import NetlinkAssistant from "@/components/NetlinkAssistant";
+import FloatingHelp from "@/components/FloatingHelp";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 import appCss from "../styles.css?url";
 
