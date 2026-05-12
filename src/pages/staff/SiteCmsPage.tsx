@@ -123,7 +123,7 @@ function SiteCmsPageInner() {
       </motion.div>
 
       <Tabs value={allowed(tab) ? tab : firstAllowed} onValueChange={setTab}>
-        <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full">
+        <TabsList className="grid grid-cols-3 md:grid-cols-7 w-full">
           {MODULES.map((m) => (
             <TabsTrigger key={m.key} value={m.key} disabled={!allowed(m.key)}>
               {m.label}
@@ -131,10 +131,13 @@ function SiteCmsPageInner() {
           ))}
         </TabsList>
 
+        <TabsContent value="pages"><PagesEditor /></TabsContent>
         <TabsContent value="slides"><SlidesEditor /></TabsContent>
         <TabsContent value="identity"><IdentityEditor /></TabsContent>
         <TabsContent value="partners"><PartnersEditor /></TabsContent>
         <TabsContent value="stats"><StatsEditor /></TabsContent>
+        <TabsContent value="versions"><VersionsViewer /></TabsContent>
+        <TabsContent value="activity"><ActivityViewer /></TabsContent>
       </Tabs>
     </div>
   );
