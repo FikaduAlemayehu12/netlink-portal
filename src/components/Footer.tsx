@@ -1,7 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { Network, Phone, Mail, MapPin, Facebook, MessageCircle, Linkedin, Instagram, Send } from "lucide-react";
+import { Network, Phone, Mail, MapPin } from "lucide-react";
 import VisitorCounter from "./VisitorCounter";
 import SubscribeForm from "./SubscribeForm";
+import { SOCIALS, PHONES, EMAIL } from "@/config/contact";
+import { BrandIcon } from "@/components/BrandIcon";
 
 export default function Footer() {
   return (
