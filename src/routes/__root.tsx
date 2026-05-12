@@ -8,7 +8,6 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import NetlinkAssistant from "@/components/NetlinkAssistant";
-import FloatingHelp from "@/components/FloatingHelp";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 
 import appCss from "../styles.css?url";
@@ -84,7 +83,6 @@ function RootComponent() {
             <AuthProvider>
               <Outlet />
               <NetlinkAssistant />
-              <FloatingHelp />
             </AuthProvider>
           </LanguageProvider>
         </TooltipProvider>
