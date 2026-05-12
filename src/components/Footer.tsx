@@ -1,7 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { Network, Phone, Mail, MapPin, Facebook, MessageCircle, Linkedin, Instagram, Send } from "lucide-react";
+import { Network, Phone, Mail, MapPin } from "lucide-react";
 import VisitorCounter from "./VisitorCounter";
 import SubscribeForm from "./SubscribeForm";
+import { SOCIALS, PHONES, EMAIL } from "@/config/contact";
+import { BrandIcon } from "@/components/BrandIcon";
 
 export default function Footer() {
   return (
@@ -23,20 +25,16 @@ export default function Footer() {
               Ethiopia's leading IT solutions provider. Delivering world-class technology services across Africa since 2024.
             </p>
             <div className="flex gap-3">
-              {[
-                { icon: Facebook, href: "#", label: "Facebook" },
-                { icon: Send, href: "#", label: "Telegram" },
-                { icon: Linkedin, href: "#", label: "LinkedIn" },
-                { icon: Instagram, href: "#", label: "Instagram" },
-                { icon: MessageCircle, href: "#", label: "WhatsApp" },
-              ].map(({ icon: Icon, href, label }) => (
+              {SOCIALS.map((s) => (
                 <a
-                  key={label}
-                  href={href}
-                  aria-label={label}
+                  key={s.brand}
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.name}
                   className="w-8 h-8 rounded-md bg-navy-light hover:bg-cyan-brand/20 flex items-center justify-center transition-colors hover:text-cyan-brand"
                 >
-                  <Icon className="w-4 h-4" />
+                  <BrandIcon brand={s.brand} className="w-4 h-4" />
                 </a>
               ))}
             </div>
