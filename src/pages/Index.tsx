@@ -51,25 +51,28 @@ export default function Index() {
       {/* Stats */}
       <section className="bg-navy py-10 border-y border-cyan-brand/10">
         <div className="container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6">
-          {stats.map(({ value, label, icon: Icon }, i) => (
-            <motion.div
-              key={label}
-              custom={i}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              className="flex items-center gap-4"
-            >
-              <div className="w-10 h-10 rounded-lg bg-[image:var(--gradient-brand)] flex items-center justify-center shrink-0 shadow-glow">
-                <Icon className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <div className="font-heading font-bold text-xl text-sky-text">{value}</div>
-                <div className="text-xs text-body-text/60">{label}</div>
-              </div>
-            </motion.div>
-          ))}
+          {stats.map((s, i) => {
+            const Icon = resolveIcon(s.icon);
+            return (
+              <motion.div
+                key={s.id}
+                custom={i}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeUp}
+                className="flex items-center gap-4"
+              >
+                <div className="w-10 h-10 rounded-lg bg-[image:var(--gradient-brand)] flex items-center justify-center shrink-0 shadow-glow">
+                  <Icon className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <div className="font-heading font-bold text-xl text-sky-text">{s.title}</div>
+                  <div className="text-xs text-body-text/60">{s.subtitle}</div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </section>
 
