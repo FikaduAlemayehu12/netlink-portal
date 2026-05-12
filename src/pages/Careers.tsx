@@ -3,6 +3,7 @@ import { Briefcase, Users, Heart, Zap, Calendar, DollarSign, Upload, FileText, X
 import { useState, useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
+import { useSiteSections, resolveIcon } from "@/lib/cms";
 import { lovable } from "@/integrations/lovable";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -43,6 +44,7 @@ const isCompanyStaffEmail = (email?: string | null) => !!email?.toLowerCase().en
 export default function Careers() {
   const { toast } = useToast();
   const [vacancies, setVacancies] = useState<Vacancy[]>([]);
+  const { items: careerBenefits } = useSiteSections("careers", "benefits");
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [applyingId, setApplyingId] = useState<string | null>(null);
   const [form, setForm] = useState({ message: "" });
@@ -265,7 +267,7 @@ export default function Careers() {
         <div className="container mx-auto px-4">
           <h2 className="font-heading font-bold text-3xl text-center mb-10">Why Work with Us?</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {benefitsList.map(({ icon: Icon, label, desc }, i) => (
+            {(careerBenefits.length > 0 ? careerBenefits.map((b: any) => ({ icon: resolveIcon(b.icon), label: b.title || "", desc: b.body || "" })) : benefitsList).map(({ icon: Icon, label, desc }: { icon: any; label: string; desc: string }, i: number) => (
               <motion.div key={label} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
                 className="p-6 bg-card rounded-xl border border-border shadow-card text-center">
                 <div className="w-12 h-12 gradient-brand rounded-xl flex items-center justify-center mx-auto mb-4">

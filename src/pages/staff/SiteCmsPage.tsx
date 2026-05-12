@@ -60,10 +60,13 @@ interface Stat {
 }
 
 const MODULES = [
+  { key: "pages", label: "Pages" },
   { key: "slides", label: "Slider" },
   { key: "identity", label: "Identity" },
   { key: "partners", label: "Partners" },
   { key: "stats", label: "Stats" },
+  { key: "versions", label: "Versions" },
+  { key: "activity", label: "Activity" },
 ];
 
 function SiteCmsPageInner() {
@@ -120,7 +123,7 @@ function SiteCmsPageInner() {
       </motion.div>
 
       <Tabs value={allowed(tab) ? tab : firstAllowed} onValueChange={setTab}>
-        <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full">
+        <TabsList className="grid grid-cols-3 md:grid-cols-7 w-full">
           {MODULES.map((m) => (
             <TabsTrigger key={m.key} value={m.key} disabled={!allowed(m.key)}>
               {m.label}
@@ -128,10 +131,13 @@ function SiteCmsPageInner() {
           ))}
         </TabsList>
 
+        <TabsContent value="pages"><PagesEditor /></TabsContent>
         <TabsContent value="slides"><SlidesEditor /></TabsContent>
         <TabsContent value="identity"><IdentityEditor /></TabsContent>
         <TabsContent value="partners"><PartnersEditor /></TabsContent>
         <TabsContent value="stats"><StatsEditor /></TabsContent>
+        <TabsContent value="versions"><VersionsViewer /></TabsContent>
+        <TabsContent value="activity"><ActivityViewer /></TabsContent>
       </Tabs>
     </div>
   );
@@ -472,6 +478,155 @@ function StatsEditor() {
             <Switch checked={s.is_active} onCheckedChange={(v) => update(s.id, { is_active: v })} />
             <Button size="icon" variant="destructive" onClick={() => remove(s.id)}><Trash2 className="w-4 h-4" /></Button>
           </div>
+        </Card>
+      ))}
+    </div>
+  );
+}
+
+/* ---------- PAGES EDITOR (generic site_sections CRUD) ---------- */
+const PAGE_OPTIONS = [
+  { key: "home", label: "Home" },
+  { key: "services", label: "Services" },
+  { key: "solutions", label: "Solutions" },
+  { key: "careers", label: "Careers" },
+  { key: "contact", label: "Get Started / Contact" },
+];
+
+function PagesEditor() {
+  const [page, setPage] = useState("home");
+  const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = async () => {
+    setLoading(true);
+    const { data } = await supabase
+      .from("site_sections" as any)
+      .select("*")
+      .eq("page", page)
+      .order("section_key", { ascending: true })
+      .order("display_order", { ascending: true });
+    setItems((data as any[]) ?? []);
+    setLoading(false);
+  };
+  useEffect(() => { load(); }, [page]);
+
+  const update = async (id: string, patch: any) => {
+    const { error } = await supabase.from("site_sections" as any).update(patch).eq("id", id);
+    if (error) { toast.error(error.message); return; }
+    setItems((s) => s.map((x) => (x.id === id ? { ...x, ...patch } : x)));
+  };
+  const add = async (sectionKey: string) => {
+    const max = items.filter((i) => i.section_key === sectionKey).reduce((m, x) => Math.max(m, x.display_order), 0);
+    const { error } = await supabase.from("site_sections" as any).insert({
+      page, section_key: sectionKey, title: "New item", body: "", display_order: max + 1, is_active: true,
+    });
+    if (error) { toast.error(error.message); return; }
+    toast.success("Added");
+    load();
+  };
+  const remove = async (id: string) => {
+    if (!confirm("Delete this item?")) return;
+    const { error } = await supabase.from("site_sections" as any).delete().eq("id", id);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Deleted");
+    load();
+  };
+
+  if (loading) return <Loader2 className="w-6 h-6 animate-spin mx-auto my-12" />;
+
+  const grouped: Record<string, any[]> = {};
+  items.forEach((i) => { (grouped[i.section_key] = grouped[i.section_key] || []).push(i); });
+  const sectionKeys = Object.keys(grouped);
+
+  return (
+    <div className="space-y-4 mt-4">
+      <div className="flex flex-wrap gap-2">
+        {PAGE_OPTIONS.map((p) => (
+          <Button key={p.key} size="sm" variant={page === p.key ? "default" : "outline"} onClick={() => setPage(p.key)}>
+            {p.label}
+          </Button>
+        ))}
+      </div>
+
+      {sectionKeys.length === 0 && (
+        <Card className="p-6 text-center text-sm text-muted-foreground">
+          No sections yet for this page. Add one below.
+          <div className="mt-3"><Button size="sm" onClick={() => add("default")}><Plus className="w-4 h-4 mr-1" /> Add Section</Button></div>
+        </Card>
+      )}
+
+      {sectionKeys.map((key) => (
+        <Card key={key} className="p-4 space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="font-heading font-semibold capitalize">{key.replace(/_/g, " ")}</h3>
+            <Button size="sm" variant="outline" onClick={() => add(key)}><Plus className="w-3 h-3 mr-1" /> Add Item</Button>
+          </div>
+          {grouped[key].map((it) => (
+            <div key={it.id} className="grid md:grid-cols-[1fr_auto] gap-3 p-3 rounded border border-border">
+              <div className="space-y-2">
+                <div className="grid md:grid-cols-2 gap-2">
+                  <Input placeholder="Title" value={it.title ?? ""} onChange={(e) => update(it.id, { title: e.target.value })} />
+                  <Input placeholder="Subtitle / category" value={it.subtitle ?? ""} onChange={(e) => update(it.id, { subtitle: e.target.value })} />
+                </div>
+                <Textarea placeholder="Body (use | to separate list items where applicable)" rows={2} value={it.body ?? ""} onChange={(e) => update(it.id, { body: e.target.value })} />
+                <div className="grid md:grid-cols-3 gap-2">
+                  <Input placeholder="Icon (e.g. Wifi)" value={it.icon ?? ""} onChange={(e) => update(it.id, { icon: e.target.value })} />
+                  <Input placeholder="Link URL" value={it.link_url ?? ""} onChange={(e) => update(it.id, { link_url: e.target.value })} />
+                  <Input placeholder="Link label" value={it.link_label ?? ""} onChange={(e) => update(it.id, { link_label: e.target.value })} />
+                </div>
+              </div>
+              <div className="flex md:flex-col items-center gap-2 justify-end">
+                <Switch checked={it.is_active} onCheckedChange={(v) => update(it.id, { is_active: v })} />
+                <Button size="icon" variant="destructive" onClick={() => remove(it.id)}><Trash2 className="w-4 h-4" /></Button>
+              </div>
+            </div>
+          ))}
+        </Card>
+      ))}
+    </div>
+  );
+}
+
+/* ---------- VERSIONS VIEWER ---------- */
+function VersionsViewer() {
+  const [versions, setVersions] = useState<any[]>([]);
+  useEffect(() => {
+    supabase.from("site_content_versions" as any).select("*").order("created_at", { ascending: false }).limit(100)
+      .then(({ data }) => setVersions((data as any[]) ?? []));
+  }, []);
+  return (
+    <div className="space-y-2 mt-4">
+      <p className="text-sm text-muted-foreground">{versions.length} recent changes</p>
+      {versions.map((v) => (
+        <Card key={v.id} className="p-3 text-sm">
+          <div className="flex items-center justify-between">
+            <span className="font-mono text-xs">{v.page} / {v.section_key}</span>
+            <span className="text-xs text-muted-foreground">{new Date(v.created_at).toLocaleString()} — {v.change_type}</span>
+          </div>
+          <div className="text-xs text-muted-foreground mt-1 truncate">
+            {v.snapshot?.title || v.snapshot?.body?.slice(0, 80) || "(no preview)"}
+          </div>
+        </Card>
+      ))}
+    </div>
+  );
+}
+
+/* ---------- ACTIVITY VIEWER ---------- */
+function ActivityViewer() {
+  const [logs, setLogs] = useState<any[]>([]);
+  useEffect(() => {
+    supabase.from("activity_logs").select("*").eq("module", "site_cms").order("created_at", { ascending: false }).limit(100)
+      .then(({ data }) => setLogs((data as any[]) ?? []));
+  }, []);
+  return (
+    <div className="space-y-2 mt-4">
+      <p className="text-sm text-muted-foreground">{logs.length} recent CMS actions</p>
+      {logs.map((l) => (
+        <Card key={l.id} className="p-3 text-sm flex items-center justify-between">
+          <span><span className="font-medium">{l.action}</span> · {l.record_type || "—"}</span>
+          <span className="text-xs text-muted-foreground">{new Date(l.created_at).toLocaleString()}</span>
         </Card>
       ))}
     </div>

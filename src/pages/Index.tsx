@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import HeroSlideshow from "@/components/HeroSlideshow";
 import PartnersStrip from "@/components/PartnersStrip";
+import { useSiteSections, useSiteSection, resolveIcon } from "@/lib/cms";
 import {
-  Network, Shield, Server, Cpu, ChevronRight, Phone, ArrowRight,
-  Users, Award, Globe, CheckCircle, Wifi, Building2, BarChart3, Star,
+  ChevronRight, Phone, ArrowRight, CheckCircle, Star,
 } from "lucide-react";
 
 interface SiteContent {
@@ -20,22 +20,6 @@ interface SiteContent {
   rating: number | null;
 }
 
-const stats = [
-  { value: "20+", label: "Certified Engineers", icon: Users },
-  { value: "2024", label: "Established", icon: Building2 },
-  { value: "50+", label: "Projects Delivered", icon: Award },
-  { value: "Pan-Africa", label: "Reach & Vision", icon: Globe },
-];
-
-const services = [
-  { icon: Wifi,        title: "Enterprise Network Solutions",      desc: "WLAN, SDN, network management, and collaboration solutions for modern businesses." },
-  { icon: BarChart3,   title: "Business Automation & Intelligence", desc: "ERP and digital office solutions to streamline operations and drive growth." },
-  { icon: Building2,   title: "Smart Infrastructure",                desc: "Structured cabling, IoT, safety & security systems for connected facilities." },
-  { icon: Server,      title: "Data Center & Power",                 desc: "Civil work, UPS, generators, solar, cooling systems for robust data centers." },
-  { icon: Shield,      title: "Network & Cybersecurity",             desc: "SOC, endpoint security, data protection, and cybersecurity assessments." },
-  { icon: Cpu,         title: "IT Power Solutions",                  desc: "End-to-end power solutions including electrical, solar, and inverter systems." },
-];
-
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.1, duration: 0.5 } }),
@@ -43,6 +27,9 @@ const fadeUp = {
 
 export default function Index() {
   const [testimonials, setTestimonials] = useState<SiteContent[]>([]);
+  const { items: stats } = useSiteSections("home", "stats");
+  const { items: services } = useSiteSections("home", "services");
+  const { item: cta } = useSiteSection("home", "cta");
 
   useEffect(() => {
     supabase
@@ -64,25 +51,28 @@ export default function Index() {
       {/* Stats */}
       <section className="bg-navy py-10 border-y border-cyan-brand/10">
         <div className="container mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6">
-          {stats.map(({ value, label, icon: Icon }, i) => (
-            <motion.div
-              key={label}
-              custom={i}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              className="flex items-center gap-4"
-            >
-              <div className="w-10 h-10 rounded-lg bg-[image:var(--gradient-brand)] flex items-center justify-center shrink-0 shadow-glow">
-                <Icon className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <div className="font-heading font-bold text-xl text-sky-text">{value}</div>
-                <div className="text-xs text-body-text/60">{label}</div>
-              </div>
-            </motion.div>
-          ))}
+          {stats.map((s, i) => {
+            const Icon = resolveIcon(s.icon);
+            return (
+              <motion.div
+                key={s.id}
+                custom={i}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeUp}
+                className="flex items-center gap-4"
+              >
+                <div className="w-10 h-10 rounded-lg bg-[image:var(--gradient-brand)] flex items-center justify-center shrink-0 shadow-glow">
+                  <Icon className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <div className="font-heading font-bold text-xl text-sky-text">{s.title}</div>
+                  <div className="text-xs text-body-text/60">{s.subtitle}</div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </section>
 
@@ -107,27 +97,30 @@ export default function Index() {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map(({ icon: Icon, title, desc }, i) => (
-              <motion.div
-                key={title}
-                custom={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={fadeUp}
-                whileHover={{ y: -4 }}
-                className="group p-6 bg-card rounded-xl border border-border hover:border-cyan-brand/40 shadow-card hover:shadow-glow transition-all duration-300"
-              >
-                <div className="w-12 h-12 rounded-xl bg-[image:var(--gradient-brand)] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-glow">
-                  <Icon className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-heading font-semibold text-lg mb-2">{title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-4">{desc}</p>
-                <Link to="/services" className="inline-flex items-center gap-1 text-xs font-medium text-cyan hover:gap-2 transition-all">
-                  Learn more <ChevronRight className="w-3 h-3" />
-                </Link>
-              </motion.div>
-            ))}
+            {services.map((s, i) => {
+              const Icon = resolveIcon(s.icon);
+              return (
+                <motion.div
+                  key={s.id}
+                  custom={i}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeUp}
+                  whileHover={{ y: -4 }}
+                  className="group p-6 bg-card rounded-xl border border-border hover:border-cyan-brand/40 shadow-card hover:shadow-glow transition-all duration-300"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-[image:var(--gradient-brand)] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-glow">
+                    <Icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="font-heading font-semibold text-lg mb-2">{s.title}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-4">{s.body}</p>
+                  <Link to="/services" className="inline-flex items-center gap-1 text-xs font-medium text-cyan hover:gap-2 transition-all">
+                    Learn more <ChevronRight className="w-3 h-3" />
+                  </Link>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -229,9 +222,9 @@ export default function Index() {
         <div className="absolute inset-0 network-pattern opacity-20" />
         <div className="relative container mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <h2 className="font-heading font-bold text-4xl md:text-5xl text-sky-text mb-4">Ready to Get Connected?</h2>
+            <h2 className="font-heading font-bold text-4xl md:text-5xl text-sky-text mb-4">{cta?.title || "Ready to Get Connected?"}</h2>
             <p className="text-body-text mb-8 max-w-md mx-auto">
-              Let our team design the perfect IT solution for your business — request a personalized demo or get a quote today.
+              {cta?.body || "Let our team design the perfect IT solution for your business — request a personalized demo or get a quote today."}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link

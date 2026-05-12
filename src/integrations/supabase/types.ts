@@ -1858,6 +1858,39 @@ export type Database = {
         }
         Relationships: []
       }
+      site_content_versions: {
+        Row: {
+          change_type: string
+          changed_by: string | null
+          created_at: string
+          id: string
+          page: string
+          section_id: string
+          section_key: string
+          snapshot: Json
+        }
+        Insert: {
+          change_type: string
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          page: string
+          section_id: string
+          section_key: string
+          snapshot: Json
+        }
+        Update: {
+          change_type?: string
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          page?: string
+          section_id?: string
+          section_key?: string
+          snapshot?: Json
+        }
+        Relationships: []
+      }
       site_partners: {
         Row: {
           created_at: string
@@ -1891,6 +1924,66 @@ export type Database = {
           name?: string
           updated_at?: string
           website_url?: string | null
+        }
+        Relationships: []
+      }
+      site_sections: {
+        Row: {
+          body: string | null
+          created_at: string
+          display_order: number
+          icon: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          item_key: string | null
+          link_label: string | null
+          link_url: string | null
+          metadata: Json
+          page: string
+          section_key: string
+          subtitle: string | null
+          title: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          display_order?: number
+          icon?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          item_key?: string | null
+          link_label?: string | null
+          link_url?: string | null
+          metadata?: Json
+          page: string
+          section_key: string
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          display_order?: number
+          icon?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          item_key?: string | null
+          link_label?: string | null
+          link_url?: string | null
+          metadata?: Json
+          page?: string
+          section_key?: string
+          subtitle?: string | null
+          title?: string | null
+          updated_at?: string
+          updated_by?: string | null
         }
         Relationships: []
       }
