@@ -44,6 +44,7 @@ const isCompanyStaffEmail = (email?: string | null) => !!email?.toLowerCase().en
 export default function Careers() {
   const { toast } = useToast();
   const [vacancies, setVacancies] = useState<Vacancy[]>([]);
+  const { items: careerBenefits } = useSiteSections("careers", "benefits");
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [applyingId, setApplyingId] = useState<string | null>(null);
   const [form, setForm] = useState({ message: "" });
