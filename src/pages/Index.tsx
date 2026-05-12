@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import HeroSlideshow from "@/components/HeroSlideshow";
 import PartnersStrip from "@/components/PartnersStrip";
+import { useSiteSections, useSiteSection, resolveIcon } from "@/lib/cms";
 import {
-  Network, Shield, Server, Cpu, ChevronRight, Phone, ArrowRight,
-  Users, Award, Globe, CheckCircle, Wifi, Building2, BarChart3, Star,
+  ChevronRight, Phone, ArrowRight, CheckCircle, Star,
 } from "lucide-react";
 
 interface SiteContent {
@@ -19,22 +19,6 @@ interface SiteContent {
   client_company: string | null;
   rating: number | null;
 }
-
-const stats = [
-  { value: "20+", label: "Certified Engineers", icon: Users },
-  { value: "2024", label: "Established", icon: Building2 },
-  { value: "50+", label: "Projects Delivered", icon: Award },
-  { value: "Pan-Africa", label: "Reach & Vision", icon: Globe },
-];
-
-const services = [
-  { icon: Wifi,        title: "Enterprise Network Solutions",      desc: "WLAN, SDN, network management, and collaboration solutions for modern businesses." },
-  { icon: BarChart3,   title: "Business Automation & Intelligence", desc: "ERP and digital office solutions to streamline operations and drive growth." },
-  { icon: Building2,   title: "Smart Infrastructure",                desc: "Structured cabling, IoT, safety & security systems for connected facilities." },
-  { icon: Server,      title: "Data Center & Power",                 desc: "Civil work, UPS, generators, solar, cooling systems for robust data centers." },
-  { icon: Shield,      title: "Network & Cybersecurity",             desc: "SOC, endpoint security, data protection, and cybersecurity assessments." },
-  { icon: Cpu,         title: "IT Power Solutions",                  desc: "End-to-end power solutions including electrical, solar, and inverter systems." },
-];
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
