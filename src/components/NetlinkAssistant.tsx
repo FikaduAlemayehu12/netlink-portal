@@ -131,6 +131,7 @@ export default function NetlinkAssistant() {
     <>
       {/* Floating button */}
       <motion.button
+        ref={buttonRef}
         onClick={() => setOpen((v) => !v)}
         whileHover={{ scale: 1.06 }}
         whileTap={{ scale: 0.94 }}
