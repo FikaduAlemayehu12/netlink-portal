@@ -60,10 +60,13 @@ interface Stat {
 }
 
 const MODULES = [
+  { key: "pages", label: "Pages" },
   { key: "slides", label: "Slider" },
   { key: "identity", label: "Identity" },
   { key: "partners", label: "Partners" },
   { key: "stats", label: "Stats" },
+  { key: "versions", label: "Versions" },
+  { key: "activity", label: "Activity" },
 ];
 
 function SiteCmsPageInner() {
