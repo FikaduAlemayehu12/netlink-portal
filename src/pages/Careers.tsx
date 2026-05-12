@@ -267,7 +267,7 @@ export default function Careers() {
         <div className="container mx-auto px-4">
           <h2 className="font-heading font-bold text-3xl text-center mb-10">Why Work with Us?</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {(careerBenefits.length > 0 ? careerBenefits.map((b) => ({ icon: resolveIcon(b.icon), label: b.title || "", desc: b.body || "" })) : benefitsList).map(({ icon: Icon, label, desc }, i) => (
+            {(careerBenefits.length > 0 ? careerBenefits.map((b: any) => ({ icon: resolveIcon(b.icon), label: b.title || "", desc: b.body || "" })) : benefitsList).map(({ icon: Icon, label, desc }: { icon: any; label: string; desc: string }, i: number) => (
               <motion.div key={label} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
                 className="p-6 bg-card rounded-xl border border-border shadow-card text-center">
                 <div className="w-12 h-12 gradient-brand rounded-xl flex items-center justify-center mx-auto mb-4">
