@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { MapPin, Phone, Mail, Send, Facebook, Linkedin, Instagram, MessageCircle } from "lucide-react";
+import { SOCIALS } from "@/config/contact";
+import { BrandIcon } from "@/components/BrandIcon";
 
 export default function Contact() {
   const [form, setForm] = useState({
