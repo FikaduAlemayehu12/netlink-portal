@@ -144,20 +144,17 @@ export default function Contact() {
               <div className="p-6 bg-card rounded-xl border border-border shadow-card">
                 <div className="font-heading font-semibold mb-4">Connect on Social Media</div>
                 <div className="grid grid-cols-2 gap-3">
-                  {[
-                    { icon: Facebook, label: "Facebook", href: "#" },
-                    { icon: Send, label: "Telegram", href: "#" },
-                    { icon: Linkedin, label: "LinkedIn", href: "#" },
-                    { icon: Instagram, label: "Instagram", href: "#" },
-                    { icon: MessageCircle, label: "WhatsApp", href: "https://wa.me/251910340909" },
-                  ].map(({ icon: Icon, label, href }) => (
+                  {SOCIALS.map((s) => (
                     <a
-                      key={label}
-                      href={href}
+                      key={s.brand}
+                      href={s.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={s.name}
                       className="flex items-center gap-2 px-3 py-2 rounded-lg border border-border hover:border-cyan-brand/40 hover:bg-accent/10 transition-colors text-sm"
                     >
-                      <Icon className="w-4 h-4 text-cyan-brand" />
-                      {label}
+                      <BrandIcon brand={s.brand} className="w-4 h-4 text-cyan-brand" />
+                      {s.name}
                     </a>
                   ))}
                 </div>
