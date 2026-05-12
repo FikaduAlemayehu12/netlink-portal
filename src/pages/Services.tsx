@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
-import { Wifi, BarChart3, Building2, Server, Shield, Cpu, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { ChevronDown } from "lucide-react";
+import { useState, useMemo } from "react";
+import { useSiteSections, resolveIcon } from "@/lib/cms";
 
-const categories = [
+const fallbackCategories = [
   {
     icon: Wifi,
     title: "Enterprise Network Solutions",
