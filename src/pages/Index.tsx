@@ -97,27 +97,30 @@ export default function Index() {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {services.map(({ icon: Icon, title, desc }, i) => (
-              <motion.div
-                key={title}
-                custom={i}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={fadeUp}
-                whileHover={{ y: -4 }}
-                className="group p-6 bg-card rounded-xl border border-border hover:border-cyan-brand/40 shadow-card hover:shadow-glow transition-all duration-300"
-              >
-                <div className="w-12 h-12 rounded-xl bg-[image:var(--gradient-brand)] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-glow">
-                  <Icon className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="font-heading font-semibold text-lg mb-2">{title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-4">{desc}</p>
-                <Link to="/services" className="inline-flex items-center gap-1 text-xs font-medium text-cyan hover:gap-2 transition-all">
-                  Learn more <ChevronRight className="w-3 h-3" />
-                </Link>
-              </motion.div>
-            ))}
+            {services.map((s, i) => {
+              const Icon = resolveIcon(s.icon);
+              return (
+                <motion.div
+                  key={s.id}
+                  custom={i}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                  variants={fadeUp}
+                  whileHover={{ y: -4 }}
+                  className="group p-6 bg-card rounded-xl border border-border hover:border-cyan-brand/40 shadow-card hover:shadow-glow transition-all duration-300"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-[image:var(--gradient-brand)] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-glow">
+                    <Icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="font-heading font-semibold text-lg mb-2">{s.title}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-4">{s.body}</p>
+                  <Link to="/services" className="inline-flex items-center gap-1 text-xs font-medium text-cyan hover:gap-2 transition-all">
+                    Learn more <ChevronRight className="w-3 h-3" />
+                  </Link>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
