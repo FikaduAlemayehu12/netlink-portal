@@ -222,9 +222,9 @@ export default function Index() {
         <div className="absolute inset-0 network-pattern opacity-20" />
         <div className="relative container mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <h2 className="font-heading font-bold text-4xl md:text-5xl text-sky-text mb-4">Ready to Get Connected?</h2>
+            <h2 className="font-heading font-bold text-4xl md:text-5xl text-sky-text mb-4">{cta?.title || "Ready to Get Connected?"}</h2>
             <p className="text-body-text mb-8 max-w-md mx-auto">
-              Let our team design the perfect IT solution for your business — request a personalized demo or get a quote today.
+              {cta?.body || "Let our team design the perfect IT solution for your business — request a personalized demo or get a quote today."}
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
