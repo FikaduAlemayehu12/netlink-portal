@@ -27,6 +27,9 @@ const fadeUp = {
 
 export default function Index() {
   const [testimonials, setTestimonials] = useState<SiteContent[]>([]);
+  const { items: stats } = useSiteSections("home", "stats");
+  const { items: services } = useSiteSections("home", "services");
+  const { item: cta } = useSiteSection("home", "cta");
 
   useEffect(() => {
     supabase
