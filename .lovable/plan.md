@@ -1,61 +1,88 @@
-# Netlink AI Assistant & Unified Contact Hub
+## Goal
 
-## 1. Centralized contact config
-Create `src/config/contact.ts` exporting:
-- `phones`: +251916690051, +251913671010, +251910340909
-- `socials`: Telegram, TikTok, LinkedIn, Facebook, WhatsApp (URLs from request)
-- `email`: info@netlink-gs.com
-- `profile`: name "Fikadu Alemayehu", avatar (generated), role "Netlink Lead"
-- `website`: https://netlink-gs.com
+Expand the existing Site CMS so staff can manage every public-facing page (Home, Slider, Services, Solutions, Careers, Get Started/Contact CTA, Partners) from one place, with edits going live instantly through a single shared data layer.
 
-Used by Navbar, ChatBot, FloatingHelp, Footer.
+## Current state
 
-## 2. i18n system (EN ↔ AM)
-- `src/i18n/translations.ts` — keys for nav, chatbot UI, quick actions, hero snippets used by chatbot
-- `src/contexts/LanguageContext.tsx` — `useLanguage()` hook with `t(key)`, `lang`, `setLang`, persisted to localStorage
-- Wrap app in `__root.tsx` with `LanguageProvider`
-- Language switcher in Navbar + chatbot quick action
+The CMS at `/staff/site-cms` already manages: Slides, Identity, Partners, Stats. The pages `Index`, `Services`, `Solutions`, `Careers`, `Contact` currently render from **hardcoded arrays** in their `.tsx` files — staff cannot edit them.
 
-## 3. Netlink AI Assistant (replaces ChatBot)
-New `src/components/NetlinkAssistant.tsx`:
-- Floating button: gradient glow, pulse, profile avatar
-- Glassmorphism panel (`backdrop-blur-xl bg-card/70 border-white/10`), Framer Motion enter/exit, scale + fade
-- Header: avatar (profile image), name, online status badge (animated dot), inline social icons (Telegram, WhatsApp, LinkedIn, phone) — merges contact center
-- Messages list with markdown rendering, typing indicator (3 bouncing dots)
-- Quick action chips: Services, Projects, Contact, Download Profile, LinkedIn, Telegram, Switch Language
-- Input with send button, Enter-to-send, mobile responsive (full-width sheet on <640px)
-- Dark/light aware via design tokens
-- Toast notifications via sonner for actions (e.g. opening external link)
+## Scope
 
-### AI backend
-- Edge function `supabase/functions/netlink-assistant/index.ts` using Lovable AI Gateway (`google/gemini-3-flash-preview`), streaming SSE
-- System prompt seeded with Netlink knowledge: services, AI Visioner, Gebeya-POS, Ministry of Revenue digital systems, contact info
-- Optional fetch of `https://netlink-gs.com` content cached 10 min for dynamic updates (best-effort, fallback to static knowledge)
-- Bilingual: system prompt instructs to reply in user's selected language passed from client
+### 1. Database (one new generic table + a few targeted ones)
 
-### Fallback
-If gateway returns 402/429, surface friendly toast and use local FAQ matcher.
+Add a single flexible table `site_sections` to back arbitrary CMS-managed page sections:
 
-## 4. Premium Navbar contact hub
-Update `src/components/Navbar.tsx`:
-- Top utility strip (desktop): phone, email, social icons (Telegram, TikTok, LinkedIn, Facebook, WhatsApp), language toggle, animated "Online" badge
-- Profile avatar on right with hover card showing direct contact actions
-- All links from central config, `target="_blank" rel="noopener noreferrer"`
+```text
+site_sections
+  id, page (home|services|solutions|careers|contact|get_started)
+  section_key (e.g. "core_services", "hero_cta", "why_choose_us")
+  item_key (nullable - for list items)
+  title, subtitle, body, icon, image_url, link_url, link_label
+  display_order, is_active, metadata (jsonb)
+  created_at, updated_at, updated_by
+```
 
-## 5. FloatingHelp consolidation
-Refactor `FloatingHelp.tsx` to read from central config; remove duplication with chatbot.
+Plus `site_content_versions` for versioning (snapshot of each row on update via trigger).
 
-## 6. Files
-**New:** `src/config/contact.ts`, `src/i18n/translations.ts`, `src/contexts/LanguageContext.tsx`, `src/components/NetlinkAssistant.tsx`, `src/assets/netlink-avatar.png` (generated), `supabase/functions/netlink-assistant/index.ts`, `public/netlink-company-profile.pdf` placeholder note (link to `/company-profile` route or external)
+RLS:
+- Public SELECT where `is_active = true`
+- Staff with `site_cms` module permission (or CEO) can INSERT/UPDATE/DELETE
+- Versions table: SELECT for staff, INSERT via trigger only
 
-**Edited:** `src/routes/__root.tsx` (LanguageProvider, swap ChatBot→NetlinkAssistant), `src/components/Navbar.tsx`, `src/components/FloatingHelp.tsx`, `src/components/PublicLayout.tsx`
+Seed table with current hardcoded content from `Services.tsx`, `Solutions.tsx`, `Careers.tsx`, `Index.tsx` services/stats so the live site is unchanged after switching to dynamic.
 
-**Removed:** old `src/components/ChatBot.tsx` usages.
+### 2. Unified data layer
 
-## 7. Tech stack used
-React 19, TanStack Router, TailwindCSS v4 tokens, Framer Motion (already installed), Lucide icons, sonner toasts, react-markdown for AI messages.
+Create `src/lib/cms.ts` exposing typed helpers:
+- `useSiteSections(page, sectionKey)` — React Query hook with realtime subscription
+- `useSiteSettings()`, `useSlides()`, `usePartners()`, `useStats()` — wrap existing tables
+- All hooks subscribe to Postgres changes → instant cache invalidation when staff saves
 
-## Notes
-- Company Profile PDF: linking to `https://netlink-gs.com` if no PDF exists; user can drop one into `public/` later.
-- Avatar: generated transparent PNG (professional headshot placeholder) via imagegen since no real photo provided.
-- All colors via design tokens — no hardcoded hex.
+Wrap router with React Query provider if not already present.
+
+### 3. Public page refactor
+
+Replace hardcoded arrays in:
+- `src/pages/Index.tsx` (services grid, stats, mission strip, founder block)
+- `src/pages/Services.tsx`
+- `src/pages/Solutions.tsx`
+- `src/pages/Careers.tsx` (intro/benefits — vacancies stay from `job_vacancies`)
+- `src/pages/Contact.tsx` (Get Started CTA copy)
+
+Each renders from `useSiteSections(...)` with the existing JSX as the fallback while loading.
+
+### 4. CMS admin UI expansion
+
+In `SiteCmsPage.tsx`, add new tabs:
+- **Pages** — page selector (Home/Services/Solutions/Careers/Get Started) → list of editable sections with inline CRUD (add item, edit, reorder, toggle active, upload image)
+- **Versions** — list recent changes per row, restore button
+- **Activity** — read-only feed from `activity_logs` filtered to `module = 'site_cms'`
+
+Reuse the existing card/inline-edit patterns from SlidesEditor.
+
+### 5. Activity logging + monitoring
+
+- All CMS mutations call `logActivity('update'|'create'|'delete', 'site_cms', recordId, page+section, { before, after })`
+- Add small "Live status" indicator in CMS header showing realtime channel connection state.
+
+## Technical details
+
+- Realtime: `ALTER PUBLICATION supabase_realtime ADD TABLE site_sections, site_content_versions;`
+- Versioning trigger: `BEFORE UPDATE` on `site_sections` → insert old row into `site_content_versions`.
+- Role-based access: continue using existing `module_permissions` (`site_cms` module) + `has_role(ceo)`.
+- No new edge functions needed — direct supabase-js calls with RLS handle everything.
+- Keep `BrandIcon`/lucide icon names stored as text in `icon` column; resolve client-side via a small icon map.
+
+## Out of scope
+
+- Multi-language content (i18n already exists for chrome strings only).
+- Draft/preview workflow beyond versioning (publish toggle = `is_active`).
+- Block-based rich editor — plain text + textarea + image upload is sufficient for current sections.
+
+## Plan steps
+
+1. Migration: create `site_sections`, `site_content_versions`, trigger, RLS, realtime, seed data.
+2. Add `src/lib/cms.ts` with typed hooks + realtime.
+3. Refactor `Index`, `Services`, `Solutions`, `Careers`, `Contact` to consume hooks.
+4. Extend `SiteCmsPage.tsx` with Pages / Versions / Activity tabs.
+5. Wire activity logging into all mutations + connection-status badge.
