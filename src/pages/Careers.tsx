@@ -3,6 +3,7 @@ import { Briefcase, Users, Heart, Zap, Calendar, DollarSign, Upload, FileText, X
 import { useState, useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
+import { useSiteSections, resolveIcon } from "@/lib/cms";
 import { lovable } from "@/integrations/lovable";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
