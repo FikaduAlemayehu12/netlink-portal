@@ -41,6 +41,9 @@ export default function DepartmentManager({ userId, assignedSubDeptIds = [], onA
   const [newSubDeptName, setNewSubDeptName] = useState<Record<string, string>>({});
   const [showAddDept, setShowAddDept] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set(assignedSubDeptIds));
+  const [renamingDept, setRenamingDept] = useState<string | null>(null);
+  const [renamingSub, setRenamingSub] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState("");
 
   useEffect(() => {
     loadData();
