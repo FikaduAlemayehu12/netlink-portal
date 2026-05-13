@@ -183,6 +183,27 @@ export default function StaffLogin() {
             >
               {loading ? "Signing in…" : "Sign In"}
             </Button>
+
+            <button type="button" onClick={() => setShowForgot((s) => !s)} className="w-full text-center text-xs text-cyan-brand hover:underline">
+              {showForgot ? "Back to sign in" : "Forgot your password?"}
+            </button>
+
+            {showForgot && (
+              <div className="mt-2 space-y-2 border-t border-white/10 pt-3">
+                <label className="text-primary-foreground/80 text-sm font-heading">Email a reset link</label>
+                <Input
+                  type="email"
+                  placeholder="firstname@netlink-gs.com"
+                  value={forgotEmail}
+                  onChange={(e) => setForgotEmail(e.target.value)}
+                  className="bg-white/5 border-white/10 text-primary-foreground placeholder:text-primary-foreground/30"
+                />
+                <Button type="button" disabled={forgotSending} onClick={sendReset} className="w-full" variant="secondary">
+                  {forgotSending ? "Sending…" : "Send reset link"}
+                </Button>
+                {forgotMsg && <p className="text-xs text-primary-foreground/70">{forgotMsg}</p>}
+              </div>
+            )}
           </form>
 
         </div>
