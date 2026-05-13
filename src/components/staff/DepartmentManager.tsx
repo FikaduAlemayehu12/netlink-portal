@@ -130,6 +130,36 @@ export default function DepartmentManager({ userId, assignedSubDeptIds = [], onA
     toast.success("Sub-department removed");
   };
 
+  const startRenameDept = (dept: Department) => {
+    setRenamingDept(dept.id);
+    setRenamingSub(null);
+    setRenameValue(dept.name);
+  };
+  const startRenameSub = (sub: SubDepartment) => {
+    setRenamingSub(sub.id);
+    setRenamingDept(null);
+    setRenameValue(sub.name);
+  };
+  const cancelRename = () => { setRenamingDept(null); setRenamingSub(null); setRenameValue(""); };
+  const saveRenameDept = async (deptId: string) => {
+    const name = renameValue.trim();
+    if (!name) return;
+    const { error } = await supabase.from("departments").update({ name }).eq("id", deptId);
+    if (error) { toast.error(error.message); return; }
+    cancelRename();
+    loadData();
+    toast.success("Department renamed");
+  };
+  const saveRenameSub = async (subId: string) => {
+    const name = renameValue.trim();
+    if (!name) return;
+    const { error } = await supabase.from("sub_departments").update({ name }).eq("id", subId);
+    if (error) { toast.error(error.message); return; }
+    cancelRename();
+    loadData();
+    toast.success("Sub-department renamed");
+  };
+
   return (
     <div className="space-y-2">
       {departments.map(dept => {
