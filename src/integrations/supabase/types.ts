@@ -1400,8 +1400,11 @@ export type Database = {
           id: string
           must_change_password: boolean
           position: string | null
+          social_links: Json
           updated_at: string
           user_id: string
+          username: string | null
+          website: string | null
         }
         Insert: {
           account_status?: string
@@ -1413,8 +1416,11 @@ export type Database = {
           id?: string
           must_change_password?: boolean
           position?: string | null
+          social_links?: Json
           updated_at?: string
           user_id: string
+          username?: string | null
+          website?: string | null
         }
         Update: {
           account_status?: string
@@ -1426,8 +1432,11 @@ export type Database = {
           id?: string
           must_change_password?: boolean
           position?: string | null
+          social_links?: Json
           updated_at?: string
           user_id?: string
+          username?: string | null
+          website?: string | null
         }
         Relationships: []
       }
