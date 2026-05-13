@@ -175,15 +175,34 @@ export default function DepartmentManager({ userId, assignedSubDeptIds = [], onA
             >
               {isExpanded ? <ChevronDown className="w-4 h-4 text-muted-foreground" /> : <ChevronRight className="w-4 h-4 text-muted-foreground" />}
               <Building2 className="w-4 h-4 text-primary" />
-              <span className="text-sm font-heading font-semibold text-foreground flex-1">{dept.name}</span>
+              {renamingDept === dept.id ? (
+                <div className="flex-1 flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                  <Input
+                    autoFocus
+                    value={renameValue}
+                    onChange={(e) => setRenameValue(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter") saveRenameDept(dept.id); if (e.key === "Escape") cancelRename(); }}
+                    className="h-7 text-xs"
+                  />
+                  <Button size="sm" variant="ghost" className="h-7 px-2" onClick={() => saveRenameDept(dept.id)}><Check className="w-3 h-3" /></Button>
+                  <Button size="sm" variant="ghost" className="h-7 px-2" onClick={cancelRename}><X className="w-3 h-3" /></Button>
+                </div>
+              ) : (
+                <span className="text-sm font-heading font-semibold text-foreground flex-1">{dept.name}</span>
+              )}
               {assignedCount > 0 && (
                 <span className="text-[10px] bg-primary text-primary-foreground px-1.5 py-0.5 rounded-full font-bold">{assignedCount}</span>
               )}
               <span className="text-[10px] text-muted-foreground">{subs.length} sub-depts</span>
-              {isCeo && !readOnly && (
-                <button onClick={(e) => { e.stopPropagation(); deleteDepartment(dept.id); }} className="text-muted-foreground hover:text-destructive transition-colors p-0.5">
-                  <Trash2 className="w-3 h-3" />
-                </button>
+              {isCeo && !readOnly && renamingDept !== dept.id && (
+                <>
+                  <button onClick={(e) => { e.stopPropagation(); startRenameDept(dept); }} className="text-muted-foreground hover:text-primary transition-colors p-0.5" title="Rename">
+                    <Pencil className="w-3 h-3" />
+                  </button>
+                  <button onClick={(e) => { e.stopPropagation(); deleteDepartment(dept.id); }} className="text-muted-foreground hover:text-destructive transition-colors p-0.5" title="Delete">
+                    <Trash2 className="w-3 h-3" />
+                  </button>
+                </>
               )}
             </div>
 
