@@ -15,8 +15,25 @@ export default function StaffLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showForgot, setShowForgot] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotMsg, setForgotMsg] = useState("");
+  const [forgotSending, setForgotSending] = useState(false);
   const { user, roles, loading: authLoading, signIn } = useAuth();
   const navigate = useNavigate();
+
+  const sendReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setForgotMsg("");
+    const em = forgotEmail.trim().toLowerCase();
+    if (!em.endsWith("@netlink-gs.com")) { setForgotMsg("Use your @netlink-gs.com email."); return; }
+    setForgotSending(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(em, {
+      redirectTo: `${window.location.origin}/staff/reset-password`,
+    });
+    setForgotSending(false);
+    setForgotMsg(error ? error.message : "If that email is registered, a reset link has been sent.");
+  };
 
   // If already logged in, redirect: staff → dashboard; client (no roles) → portal
   useEffect(() => {
