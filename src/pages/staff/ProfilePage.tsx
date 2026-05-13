@@ -4,10 +4,13 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { Camera, Save, Phone, Calendar, FileText } from "lucide-react";
+import { Camera, Save, Phone, Calendar, FileText, Globe, AtSign, Share2, X } from "lucide-react";
 import StaffLayout from "@/components/staff/StaffLayout";
+import SocialLinksDisplay from "@/components/staff/SocialLinksDisplay";
+import { SOCIAL_PLATFORMS, SOCIAL_PLATFORMS_BY_ID, type SocialPlatformId } from "@/lib/social-platforms";
 import { ROLE_LABELS } from "@/lib/supabase";
 import type { AppRole } from "@/lib/supabase";
+import { toast } from "sonner";
 
 export default function ProfilePage() {
   const { profile, roles, isCeo, refreshProfile, user } = useAuth();

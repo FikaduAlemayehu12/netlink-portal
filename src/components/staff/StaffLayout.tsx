@@ -159,7 +159,9 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
   }
 
   if (!user) return <Navigate to="/staff/login" replace />;
-  if (roles.length === 0) return <Navigate to="/careers" replace />;
+  // Confirmed non-staff (no roles) → send back to login, never to /careers.
+  // StaffGuard already wraps this; loading=true is handled above.
+  if (roles.length === 0) return <Navigate to="/staff/login" replace />;
 
   const renderNavItem = ({ label, path, icon: Icon, module }: NavItem) => {
     const isActive = location.pathname === path;

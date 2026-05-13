@@ -15,8 +15,25 @@ export default function StaffLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showForgot, setShowForgot] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotMsg, setForgotMsg] = useState("");
+  const [forgotSending, setForgotSending] = useState(false);
   const { user, roles, loading: authLoading, signIn } = useAuth();
   const navigate = useNavigate();
+
+  const sendReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setForgotMsg("");
+    const em = forgotEmail.trim().toLowerCase();
+    if (!em.endsWith("@netlink-gs.com")) { setForgotMsg("Use your @netlink-gs.com email."); return; }
+    setForgotSending(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(em, {
+      redirectTo: `${window.location.origin}/staff/reset-password`,
+    });
+    setForgotSending(false);
+    setForgotMsg(error ? error.message : "If that email is registered, a reset link has been sent.");
+  };
 
   // If already logged in, redirect: staff → dashboard; client (no roles) → portal
   useEffect(() => {
@@ -166,6 +183,27 @@ export default function StaffLogin() {
             >
               {loading ? "Signing in…" : "Sign In"}
             </Button>
+
+            <button type="button" onClick={() => setShowForgot((s) => !s)} className="w-full text-center text-xs text-cyan-brand hover:underline">
+              {showForgot ? "Back to sign in" : "Forgot your password?"}
+            </button>
+
+            {showForgot && (
+              <div className="mt-2 space-y-2 border-t border-white/10 pt-3">
+                <label className="text-primary-foreground/80 text-sm font-heading">Email a reset link</label>
+                <Input
+                  type="email"
+                  placeholder="firstname@netlink-gs.com"
+                  value={forgotEmail}
+                  onChange={(e) => setForgotEmail(e.target.value)}
+                  className="bg-white/5 border-white/10 text-primary-foreground placeholder:text-primary-foreground/30"
+                />
+                <Button type="button" disabled={forgotSending} onClick={sendReset} className="w-full" variant="secondary">
+                  {forgotSending ? "Sending…" : "Send reset link"}
+                </Button>
+                {forgotMsg && <p className="text-xs text-primary-foreground/70">{forgotMsg}</p>}
+              </div>
+            )}
           </form>
 
         </div>

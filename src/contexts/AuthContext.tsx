@@ -52,8 +52,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async (userId: string) => {
-    setRoles([]);
-    setProfile(null);
+    // Don't clear existing roles/profile here — that causes guards to flicker
+    // and redirect the user mid-session ("auto-logout to /careers" bug).
     const { data } = await withRetry(async () => {
       const result = await supabase
         .from("profiles")

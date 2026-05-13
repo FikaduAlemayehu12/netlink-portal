@@ -1,88 +1,96 @@
-## Goal
+## Goals
 
-Expand the existing Site CMS so staff can manage every public-facing page (Home, Slider, Services, Solutions, Careers, Get Started/Contact CTA, Partners) from one place, with edits going live instantly through a single shared data layer.
+Deliver four distinct upgrades to the Staff Portal:
 
-## Current state
+1. **Self-service password reset** (forgot password + secure email link).
+2. **Optional profile fields**: personal website, username, and 20 social-media handles. Icons hidden unless a URL is filled.
+3. **Bug fixes**: auto-logout-to-/careers loop (React error #185) + AdminUsers staff creation reliability.
+4. **Department / Sub-department full CRUD** (rename support is currently missing).
 
-The CMS at `/staff/site-cms` already manages: Slides, Identity, Partners, Stats. The pages `Index`, `Services`, `Solutions`, `Careers`, `Contact` currently render from **hardcoded arrays** in their `.tsx` files — staff cannot edit them.
+---
 
-## Scope
+## 1. Auto-logout & React #185 (highest priority — fix first)
 
-### 1. Database (one new generic table + a few targeted ones)
+Root cause: `src/components/staff/StaffLayout.tsx` line 162 redirects to `/careers` when `roles.length === 0`. `AuthContext.fetchProfile` clears `roles` to `[]` at the start of every refetch (`refreshProfile`, profile updates, tab focus, etc.), so during normal use the layout briefly sees empty roles and bounces the user to the public Careers page — which triggers the "Maximum update depth exceeded" loop.
 
-Add a single flexible table `site_sections` to back arbitrary CMS-managed page sections:
+Fixes:
+- `AuthContext`: don't clear `roles`/`profile` at the top of `fetchProfile`; only set after successful fetch. Add a `rolesLoaded` flag (or reuse `loading`) so guards can distinguish "no roles yet" from "definitely no roles".
+- `StaffLayout` & `StaffGuard`: while `loading` is true, render the spinner instead of redirecting. Only redirect when loading is settled AND roles are still empty.
+- Redirect destination for non-staff users → `/staff/login` (not `/careers`), with a toast explaining access.
 
-```text
-site_sections
-  id, page (home|services|solutions|careers|contact|get_started)
-  section_key (e.g. "core_services", "hero_cta", "why_choose_us")
-  item_key (nullable - for list items)
-  title, subtitle, body, icon, image_url, link_url, link_label
-  display_order, is_active, metadata (jsonb)
-  created_at, updated_at, updated_by
+## 2. Self-service password reset
+
+DB / config:
+- Use Supabase's built-in `resetPasswordForEmail`. Requires the auth email template + redirect URL to exist (already supported via Lovable Cloud).
+
+Code:
+- `StaffLogin.tsx`: add "Forgot password?" link → opens modal/inline form to enter staff email; calls `supabase.auth.resetPasswordForEmail(email, { redirectTo: <origin>/staff/reset-password })`. Validate `@netlink-gs.com` domain.
+- New public page `src/pages/staff/ResetPassword.tsx` + route `src/routes/staff/reset-password.tsx`. Reads `type=recovery` from URL hash, renders strong-password form (reuse `PasswordStrength` from `ChangePassword.tsx`), calls `supabase.auth.updateUser({ password })`, then redirects to `/staff/login`.
+- Enable `password_hibp_enabled: true` via `configure_auth` for leaked-password protection.
+- Trigger Lovable's auth email template scaffolding (`scaffold_auth_email_templates`) so the recovery email is branded.
+
+## 3. Profile: website, username, social media
+
+DB migration on `profiles` (additive, all nullable):
+- `username text unique` (with case-insensitive index)
+- `website text`
+- `social_links jsonb default '{}'::jsonb` — keys are platform IDs, values are the URL the user entered.
+
+Supported platforms (20):
+`facebook, whatsapp, youtube, instagram, tiktok, wechat, telegram, snapchat, twitter, reddit, pinterest, quora, linkedin, threads, twitch, discord, tumblr, medium, bluesky, mastodon`.
+
+Frontend:
+- `src/lib/social-platforms.ts`: array of `{ id, label, icon (lucide or BrandIcon), color, placeholder, validate(url) }`. Use existing `BrandIcon` for SVG-faithful brand marks; fall back to lucide where appropriate.
+- `src/pages/staff/ProfilePage.tsx`: add new sections "Identity" (username + website) and "Social Links" (collapsible grid: each platform input with brand-color icon + URL field + "Clear" button). All optional. Validate URL format on blur.
+- New presentational component `src/components/staff/SocialLinksDisplay.tsx`: receives `social_links` + `website`, renders ONLY the icons whose URL is non-empty, each opens in a new tab (`target="_blank" rel="noopener noreferrer"`). Use it on `ProfilePage` (own preview) and on `TeamPage` for each member.
+- Ensure "X (Twitter)" etc. label correctly.
+
+## 4. Department / Sub-department CRUD
+
+Currently `DepartmentManager.tsx` supports create + delete only. Add:
+- Inline rename for departments and sub-departments (pencil icon → input → save / cancel).
+- `update` calls on `departments` / `sub_departments` tables (RLS already permits CEO).
+- Toast feedback + optimistic UI.
+
+## 5. AdminUsers staff creation
+
+Verify and harden:
+- `create-single-staff` edge function currently throws if duplicate `client_accounts` row exists; the current cleanup is fine. Ensure errors surface clearly in `AdminUsers.createUser` (already shows toast — confirmed).
+- Add a "Staff already exists" check before invoking edge function (avoid 400 noise).
+- Confirm new permissions/department assignments persist after creation.
+
+---
+
+## Technical Details
+
+### Migrations
+```sql
+ALTER TABLE public.profiles
+  ADD COLUMN IF NOT EXISTS username text,
+  ADD COLUMN IF NOT EXISTS website text,
+  ADD COLUMN IF NOT EXISTS social_links jsonb NOT NULL DEFAULT '{}'::jsonb;
+
+CREATE UNIQUE INDEX IF NOT EXISTS profiles_username_lower_idx
+  ON public.profiles (lower(username)) WHERE username IS NOT NULL;
 ```
 
-Plus `site_content_versions` for versioning (snapshot of each row on update via trigger).
+No new RLS policies — existing self-update policy on `profiles` already covers these new columns.
 
-RLS:
-- Public SELECT where `is_active = true`
-- Staff with `site_cms` module permission (or CEO) can INSERT/UPDATE/DELETE
-- Versions table: SELECT for staff, INSERT via trigger only
+### Files touched
+- Edit: `src/contexts/AuthContext.tsx`, `src/components/staff/StaffLayout.tsx`, `src/components/staff/StaffGuard.tsx`, `src/pages/staff/StaffLogin.tsx`, `src/pages/staff/ProfilePage.tsx`, `src/pages/staff/AdminUsers.tsx`, `src/components/staff/DepartmentManager.tsx`, `src/integrations/supabase/types.ts` (auto), `src/pages/staff/TeamPage.tsx` (optional render).
+- Create: `src/lib/social-platforms.ts`, `src/components/staff/SocialLinksDisplay.tsx`, `src/pages/staff/ResetPassword.tsx`, `src/routes/staff/reset-password.tsx`.
 
-Seed table with current hardcoded content from `Services.tsx`, `Solutions.tsx`, `Careers.tsx`, `Index.tsx` services/stats so the live site is unchanged after switching to dynamic.
+### Out of scope
+- Public website social-icon system (already done in earlier turn).
+- Per-platform OAuth verification — we just store URLs the user provides.
+- Username-as-login (purely cosmetic profile field).
 
-### 2. Unified data layer
+---
 
-Create `src/lib/cms.ts` exposing typed helpers:
-- `useSiteSections(page, sectionKey)` — React Query hook with realtime subscription
-- `useSiteSettings()`, `useSlides()`, `usePartners()`, `useStats()` — wrap existing tables
-- All hooks subscribe to Postgres changes → instant cache invalidation when staff saves
-
-Wrap router with React Query provider if not already present.
-
-### 3. Public page refactor
-
-Replace hardcoded arrays in:
-- `src/pages/Index.tsx` (services grid, stats, mission strip, founder block)
-- `src/pages/Services.tsx`
-- `src/pages/Solutions.tsx`
-- `src/pages/Careers.tsx` (intro/benefits — vacancies stay from `job_vacancies`)
-- `src/pages/Contact.tsx` (Get Started CTA copy)
-
-Each renders from `useSiteSections(...)` with the existing JSX as the fallback while loading.
-
-### 4. CMS admin UI expansion
-
-In `SiteCmsPage.tsx`, add new tabs:
-- **Pages** — page selector (Home/Services/Solutions/Careers/Get Started) → list of editable sections with inline CRUD (add item, edit, reorder, toggle active, upload image)
-- **Versions** — list recent changes per row, restore button
-- **Activity** — read-only feed from `activity_logs` filtered to `module = 'site_cms'`
-
-Reuse the existing card/inline-edit patterns from SlidesEditor.
-
-### 5. Activity logging + monitoring
-
-- All CMS mutations call `logActivity('update'|'create'|'delete', 'site_cms', recordId, page+section, { before, after })`
-- Add small "Live status" indicator in CMS header showing realtime channel connection state.
-
-## Technical details
-
-- Realtime: `ALTER PUBLICATION supabase_realtime ADD TABLE site_sections, site_content_versions;`
-- Versioning trigger: `BEFORE UPDATE` on `site_sections` → insert old row into `site_content_versions`.
-- Role-based access: continue using existing `module_permissions` (`site_cms` module) + `has_role(ceo)`.
-- No new edge functions needed — direct supabase-js calls with RLS handle everything.
-- Keep `BrandIcon`/lucide icon names stored as text in `icon` column; resolve client-side via a small icon map.
-
-## Out of scope
-
-- Multi-language content (i18n already exists for chrome strings only).
-- Draft/preview workflow beyond versioning (publish toggle = `is_active`).
-- Block-based rich editor — plain text + textarea + image upload is sufficient for current sections.
-
-## Plan steps
-
-1. Migration: create `site_sections`, `site_content_versions`, trigger, RLS, realtime, seed data.
-2. Add `src/lib/cms.ts` with typed hooks + realtime.
-3. Refactor `Index`, `Services`, `Solutions`, `Careers`, `Contact` to consume hooks.
-4. Extend `SiteCmsPage.tsx` with Pages / Versions / Activity tabs.
-5. Wire activity logging into all mutations + connection-status badge.
+## Execution order
+1. Migration (additive columns)
+2. Fix auto-logout / #185 in AuthContext + guards
+3. Department rename CRUD
+4. Profile fields + social UI
+5. Password-reset flow (page + route + login link + auth email scaffold)
+6. Verify AdminUsers staff creation end-to-end

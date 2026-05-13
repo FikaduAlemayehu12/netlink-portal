@@ -26,6 +26,7 @@ import { Route as StaffSiteContentRouteImport } from './routes/staff/site-conten
 import { Route as StaffSiteCmsRouteImport } from './routes/staff/site-cms'
 import { Route as StaffSettingsRouteImport } from './routes/staff/settings'
 import { Route as StaffSalaryRouteImport } from './routes/staff/salary'
+import { Route as StaffResetPasswordRouteImport } from './routes/staff/reset-password'
 import { Route as StaffRecycleBinRouteImport } from './routes/staff/recycle-bin'
 import { Route as StaffProjectsRouteImport } from './routes/staff/projects'
 import { Route as StaffProfileRouteImport } from './routes/staff/profile'
@@ -126,6 +127,11 @@ const StaffSettingsRoute = StaffSettingsRouteImport.update({
 const StaffSalaryRoute = StaffSalaryRouteImport.update({
   id: '/staff/salary',
   path: '/staff/salary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffResetPasswordRoute = StaffResetPasswordRouteImport.update({
+  id: '/staff/reset-password',
+  path: '/staff/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StaffRecycleBinRoute = StaffRecycleBinRouteImport.update({
@@ -235,6 +241,7 @@ export interface FileRoutesByFullPath {
   '/staff/profile': typeof StaffProfileRoute
   '/staff/projects': typeof StaffProjectsRoute
   '/staff/recycle-bin': typeof StaffRecycleBinRoute
+  '/staff/reset-password': typeof StaffResetPasswordRoute
   '/staff/salary': typeof StaffSalaryRoute
   '/staff/settings': typeof StaffSettingsRoute
   '/staff/site-cms': typeof StaffSiteCmsRoute
@@ -270,6 +277,7 @@ export interface FileRoutesByTo {
   '/staff/profile': typeof StaffProfileRoute
   '/staff/projects': typeof StaffProjectsRoute
   '/staff/recycle-bin': typeof StaffRecycleBinRoute
+  '/staff/reset-password': typeof StaffResetPasswordRoute
   '/staff/salary': typeof StaffSalaryRoute
   '/staff/settings': typeof StaffSettingsRoute
   '/staff/site-cms': typeof StaffSiteCmsRoute
@@ -306,6 +314,7 @@ export interface FileRoutesById {
   '/staff/profile': typeof StaffProfileRoute
   '/staff/projects': typeof StaffProjectsRoute
   '/staff/recycle-bin': typeof StaffRecycleBinRoute
+  '/staff/reset-password': typeof StaffResetPasswordRoute
   '/staff/salary': typeof StaffSalaryRoute
   '/staff/settings': typeof StaffSettingsRoute
   '/staff/site-cms': typeof StaffSiteCmsRoute
@@ -343,6 +352,7 @@ export interface FileRouteTypes {
     | '/staff/profile'
     | '/staff/projects'
     | '/staff/recycle-bin'
+    | '/staff/reset-password'
     | '/staff/salary'
     | '/staff/settings'
     | '/staff/site-cms'
@@ -378,6 +388,7 @@ export interface FileRouteTypes {
     | '/staff/profile'
     | '/staff/projects'
     | '/staff/recycle-bin'
+    | '/staff/reset-password'
     | '/staff/salary'
     | '/staff/settings'
     | '/staff/site-cms'
@@ -413,6 +424,7 @@ export interface FileRouteTypes {
     | '/staff/profile'
     | '/staff/projects'
     | '/staff/recycle-bin'
+    | '/staff/reset-password'
     | '/staff/salary'
     | '/staff/settings'
     | '/staff/site-cms'
@@ -448,6 +460,7 @@ export interface RootRouteChildren {
   StaffProfileRoute: typeof StaffProfileRoute
   StaffProjectsRoute: typeof StaffProjectsRoute
   StaffRecycleBinRoute: typeof StaffRecycleBinRoute
+  StaffResetPasswordRoute: typeof StaffResetPasswordRoute
   StaffSalaryRoute: typeof StaffSalaryRoute
   StaffSettingsRoute: typeof StaffSettingsRoute
   StaffSiteCmsRoute: typeof StaffSiteCmsRoute
@@ -577,6 +590,13 @@ declare module '@tanstack/react-router' {
       path: '/staff/salary'
       fullPath: '/staff/salary'
       preLoaderRoute: typeof StaffSalaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/reset-password': {
+      id: '/staff/reset-password'
+      path: '/staff/reset-password'
+      fullPath: '/staff/reset-password'
+      preLoaderRoute: typeof StaffResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/staff/recycle-bin': {
@@ -729,6 +749,7 @@ const rootRouteChildren: RootRouteChildren = {
   StaffProfileRoute: StaffProfileRoute,
   StaffProjectsRoute: StaffProjectsRoute,
   StaffRecycleBinRoute: StaffRecycleBinRoute,
+  StaffResetPasswordRoute: StaffResetPasswordRoute,
   StaffSalaryRoute: StaffSalaryRoute,
   StaffSettingsRoute: StaffSettingsRoute,
   StaffSiteCmsRoute: StaffSiteCmsRoute,
@@ -741,12 +762,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
