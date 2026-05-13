@@ -216,11 +216,30 @@ export default function DepartmentManager({ userId, assignedSubDeptIds = [], onA
                       onCheckedChange={() => toggleSubDept(sub.id)}
                       disabled={readOnly}
                     />
-                    <Label htmlFor={`sub-${sub.id}`} className="text-sm cursor-pointer flex-1">{sub.name}</Label>
-                    {isCeo && !readOnly && (
-                      <button onClick={() => deleteSubDepartment(sub.id)} className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-all p-0.5">
-                        <Trash2 className="w-3 h-3" />
-                      </button>
+                    {renamingSub === sub.id ? (
+                      <div className="flex-1 flex items-center gap-1">
+                        <Input
+                          autoFocus
+                          value={renameValue}
+                          onChange={(e) => setRenameValue(e.target.value)}
+                          onKeyDown={(e) => { if (e.key === "Enter") saveRenameSub(sub.id); if (e.key === "Escape") cancelRename(); }}
+                          className="h-7 text-xs"
+                        />
+                        <Button size="sm" variant="ghost" className="h-7 px-2" onClick={() => saveRenameSub(sub.id)}><Check className="w-3 h-3" /></Button>
+                        <Button size="sm" variant="ghost" className="h-7 px-2" onClick={cancelRename}><X className="w-3 h-3" /></Button>
+                      </div>
+                    ) : (
+                      <Label htmlFor={`sub-${sub.id}`} className="text-sm cursor-pointer flex-1">{sub.name}</Label>
+                    )}
+                    {isCeo && !readOnly && renamingSub !== sub.id && (
+                      <div className="opacity-0 group-hover:opacity-100 flex items-center gap-1 transition-opacity">
+                        <button onClick={() => startRenameSub(sub)} className="text-muted-foreground hover:text-primary p-0.5" title="Rename">
+                          <Pencil className="w-3 h-3" />
+                        </button>
+                        <button onClick={() => deleteSubDepartment(sub.id)} className="text-muted-foreground hover:text-destructive p-0.5" title="Delete">
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
                     )}
                   </div>
                 ))}
