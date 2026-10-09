@@ -13,6 +13,9 @@ import slideConsulting from "@/assets/slides/consulting.jpg";
 import slideCabling from "@/assets/slide-cabling.jpg";
 import slideCyber from "@/assets/slide-cybersecurity.jpg";
 import heroBg from "@/assets/hero-bg.jpg";
+import slideItEquip from "@/assets/slides/it-equipment.jpg";
+import slideFiber from "@/assets/slides/fiber.jpg";
+import slideAddis from "@/assets/slides/addis-network.jpg";
 
 interface Slide {
   id: string;
@@ -35,6 +38,9 @@ const slides: Slide[] = [
   { id: "s8", image_url: slideCabling, title: "Enterprise Solutions", caption: "Integrated systems that support organizational performance.", cta_label: "View Solutions", cta_link: "/solutions" },
   { id: "s9", image_url: heroBg, title: "Innovation & Collaboration", caption: "Building better solutions together with our clients and partners.", cta_label: "About Us", cta_link: "/about" },
   { id: "s10", image_url: slideCyber, title: "Our Commitment to Excellence", caption: "Delivering quality, trust, and sustainable value in every project.", cta_label: "Contact Us", cta_link: "/contact" },
+  { id: "s11", image_url: slideItEquip, title: "IT Equipment Supply, Installation & Training", caption: "Supply, installation, commissioning, configuration, and hands-on training for equipment from well-known vendors.", cta_label: "Request a Quote", cta_link: "/contact" },
+  { id: "s12", image_url: slideFiber, title: "Fiber & Structured Cabling", caption: "High-performance cabling and fiber connectivity built to standard.", cta_label: "Explore Networking", cta_link: "/services" },
+  { id: "s13", image_url: slideAddis, title: "Connecting Ethiopia's Future", caption: "Technology that helps organizations across Ethiopia grow with confidence.", cta_label: "Get Started", cta_link: "/contact" },
 ];
 
 const ROTATION_MS = 5000;
@@ -143,22 +149,7 @@ export default function HeroSlideshow() {
               </a>
             </div>
 
-            {/* Discrete progress dots — no counter, no arrows */}
-            {slides.length > 1 && (
-              <div className="flex gap-2 justify-center mt-10">
-                {slides.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setIndex(i)}
-                    aria-label={`Go to slide ${i + 1}`}
-                    className={`h-1.5 rounded-full transition-all duration-500 ${
-                      i === index ? "w-10 bg-emerald-brand" : "w-1.5 bg-sky-text/30 hover:bg-sky-text/60"
-                    }`}
-                  />
-                ))}
-              </div>
-            )}
-          </motion.div>
+                      </motion.div>
         </AnimatePresence>
       </div>
     </section>

@@ -16,6 +16,8 @@ Board of Directors (always give full name, role, and phone as a markdown tel lin
 4. Mr. Feyisa Bekele Wondimu — Treasurer — +251934250688
 If asked about information not listed here, say it is not currently listed.
 
+IT Equipment Supply & Deployment: Netlink supplies IT equipment from well-known vendors and provides installation, commissioning, configuration, and user/technical training.
+
 Company: Netlink General Solutions, headquartered in Addis Ababa, Ethiopia.
 Mission: World-class IT company operating in Africa, delivering enterprise-grade
 infrastructure, AI, and digital transformation. Team of 20+ internationally
