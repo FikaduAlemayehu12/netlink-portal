@@ -1,115 +1,55 @@
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Phone } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 
-// Bundled fallback assets (used if DB is empty / first paint)
 import slideWelcome from "@/assets/slides/welcome-hero.jpg";
 import slideDatacenter from "@/assets/slides/datacenter-addis.jpg";
 import slideSmartcity from "@/assets/slides/smartcity-addis.jpg";
 import slideTower from "@/assets/slides/network-tower.jpg";
 import slideNoc from "@/assets/slides/cybersecurity-noc.jpg";
+import slideSoftware from "@/assets/slides/software-dev.jpg";
+import slideConsulting from "@/assets/slides/consulting.jpg";
+import slideCabling from "@/assets/slide-cabling.jpg";
+import slideCyber from "@/assets/slide-cybersecurity.jpg";
+import heroBg from "@/assets/hero-bg.jpg";
 
 interface Slide {
   id: string;
   image_url: string;
-  title: string | null;
-  caption: string | null;
-  cta_label: string | null;
-  cta_link: string | null;
+  title: string;
+  caption: string;
+  cta_label: string;
+  cta_link: string;
 }
 
-// Map seeded /src/assets/... paths to bundled imports for instant load
-const BUNDLED: Record<string, string> = {
-  "/src/assets/slides/welcome-hero.jpg": slideWelcome,
-  "/src/assets/slides/datacenter-addis.jpg": slideDatacenter,
-  "/src/assets/slides/smartcity-addis.jpg": slideSmartcity,
-  "/src/assets/slides/network-tower.jpg": slideTower,
-  "/src/assets/slides/cybersecurity-noc.jpg": slideNoc,
-};
-
-const FALLBACK_SLIDES: Slide[] = [
-  {
-    id: "fallback-1",
-    image_url: slideWelcome,
-    title: "Welcome to Netlink General Solutions PLC",
-    caption: "Where Ethiopia's digital future begins and ambitious organizations find the technology partner they can trust to build bold, move smart, and grow without limits.",
-    cta_label: "Get Started",
-    cta_link: "/contact",
-  },
-  {
-    id: "fallback-2",
-    image_url: slideDatacenter,
-    title: "Reliable Data Center & Power Solutions",
-    caption: "Resilient infrastructure for organizations that need uptime, security, and room to grow.",
-    cta_label: "Explore Services",
-    cta_link: "/services",
-  },
-  {
-    id: "fallback-3",
-    image_url: slideSmartcity,
-    title: "Smart Infrastructure for Connected Cities",
-    caption: "Integrated networking, IoT, and safety systems designed for modern Ethiopian enterprises.",
-    cta_label: "View Solutions",
-    cta_link: "/solutions",
-  },
-  {
-    id: "fallback-4",
-    image_url: slideTower,
-    title: "Enterprise Networks Built for Scale",
-    caption: "Wireless, structured cabling, and managed network systems delivered by certified engineers.",
-    cta_label: "Talk to Us",
-    cta_link: "/contact",
-  },
-  {
-    id: "fallback-5",
-    image_url: slideNoc,
-    title: "Network & Cybersecurity Operations",
-    caption: "Practical protection, monitoring, and response services for mission-critical environments.",
-    cta_label: "Secure Your Business",
-    cta_link: "/contact",
-  },
+// Hard-coded 10-slide hero configuration
+const slides: Slide[] = [
+  { id: "s1", image_url: slideWelcome, title: "Welcome to Netlink General Solutions", caption: "Professional technology and business solutions for Ethiopia's growing organizations.", cta_label: "Get Started", cta_link: "/contact" },
+  { id: "s2", image_url: slideSoftware, title: "Software Development", caption: "Reliable, scalable, and user-focused software built for your business.", cta_label: "Our Services", cta_link: "/services" },
+  { id: "s3", image_url: slideTower, title: "IT Infrastructure & Networking", caption: "Secure and dependable connectivity through enterprise networks and cabling.", cta_label: "Explore Networking", cta_link: "/services" },
+  { id: "s4", image_url: slideSmartcity, title: "Digital Transformation", caption: "Modernizing business operations through smart, integrated technology.", cta_label: "View Solutions", cta_link: "/solutions" },
+  { id: "s5", image_url: slideNoc, title: "Cybersecurity & Data Protection", caption: "Protecting your digital assets with monitoring, firewalls, and response.", cta_label: "Secure Your Business", cta_link: "/contact" },
+  { id: "s6", image_url: slideDatacenter, title: "Cloud & Systems Integration", caption: "Data center, power, and integrated systems for efficient operations.", cta_label: "Learn More", cta_link: "/solutions" },
+  { id: "s7", image_url: slideConsulting, title: "Business & Technology Consulting", caption: "Practical technology guidance that supports real business growth.", cta_label: "Talk to Us", cta_link: "/contact" },
+  { id: "s8", image_url: slideCabling, title: "Enterprise Solutions", caption: "Integrated systems that support organizational performance.", cta_label: "View Solutions", cta_link: "/solutions" },
+  { id: "s9", image_url: heroBg, title: "Innovation & Collaboration", caption: "Building better solutions together with our clients and partners.", cta_label: "About Us", cta_link: "/about" },
+  { id: "s10", image_url: slideCyber, title: "Our Commitment to Excellence", caption: "Delivering quality, trust, and sustainable value in every project.", cta_label: "Contact Us", cta_link: "/contact" },
 ];
 
 const ROTATION_MS = 5000;
 
-function resolveImage(url: string): string {
-  return BUNDLED[url] ?? url;
-}
-
 export default function HeroSlideshow() {
-  const [slides, setSlides] = useState<Slide[]>(FALLBACK_SLIDES);
   const [index, setIndex] = useState(0);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
-    const loadSlides = async () => {
-      try {
-        const { data } = await supabase
-          .from("site_slides" as any)
-          .select("id, image_url, title, caption, cta_label, cta_link")
-          .eq("is_active", true)
-          .order("display_order", { ascending: true });
-        if (data && Array.isArray(data) && data.length > 0) {
-          setSlides(data as unknown as Slide[]);
-        }
-      } catch {
-        setSlides(FALLBACK_SLIDES);
-      }
-    };
-
-    loadSlides();
-  }, []);
-
-  useEffect(() => {
-    if (slides.length <= 1) return;
+    if (reduceMotion) return;
     const t = setInterval(() => setIndex((i) => (i + 1) % slides.length), ROTATION_MS);
     return () => clearInterval(t);
-  }, [slides.length]);
+  }, [reduceMotion]);
 
-  useEffect(() => {
-    setIndex((current) => (current >= slides.length ? 0 : current));
-  }, [slides.length]);
+  const resolveImage = (u: string) => u;
 
   const slide = slides[index] ?? slides[0];
 

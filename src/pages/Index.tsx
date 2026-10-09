@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import HeroSlideshow from "@/components/HeroSlideshow";
 import PartnersStrip from "@/components/PartnersStrip";
+import BoardMembers from "@/components/BoardMembers";
 import { useSiteSections, useSiteSection, resolveIcon } from "@/lib/cms";
 import {
   ChevronRight, Phone, ArrowRight, CheckCircle, Star,
@@ -127,6 +128,8 @@ export default function Index() {
 
       {/* Partners + trust badges */}
       <PartnersStrip />
+
+      <BoardMembers />
 
       {/* Mission Strip — concise, no team/certified-experts paragraph */}
       <section className="py-20 gradient-hero relative overflow-hidden">
