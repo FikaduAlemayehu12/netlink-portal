@@ -62,7 +62,7 @@ export default function HeroSlideshow() {
       <AnimatePresence mode="sync">
         <motion.div
           key={slide.id + "-" + index}
-          initial={{ opacity: 0, scale: 1.06 }}
+          initial={{ opacity: 0, scale: 1.02 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 1 }}
           transition={{ duration: 1.4, ease: [0.4, 0, 0.2, 1] }}
@@ -71,7 +71,7 @@ export default function HeroSlideshow() {
           <img
             src={resolveImage(slide.image_url)}
             alt={slide.caption ?? slide.title ?? "Netlink slide"}
-            className="w-full h-full object-cover animate-ken-burns"
+            className="w-full h-full object-cover"
             loading={index === 0 ? "eager" : "lazy"}
             width={1920}
             height={1080}
