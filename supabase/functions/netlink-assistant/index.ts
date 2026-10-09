@@ -9,6 +9,13 @@ const corsHeaders = {
 const KNOWLEDGE = `
 NETLINK GENERAL SOLUTIONS — KNOWLEDGE BASE
 
+Board of Directors (always give full name, role, and phone as a markdown tel link, e.g. [+251 91 407 4489](tel:+251914074489)):
+1. Mrs. Selam Asmelash Kasa — Chairperson — +251 91 407 4489
+2. Mr. Agegnehu Asnakew Admassie — Vice Chairperson — +251 96 531 1037
+3. Mr. Fikadu Alemayehu Bekele — Secretary — +252 916 690 051
+4. Mr. Feyisa Bekele Wondimu — Treasurer — +251934250688
+If asked about information not listed here, say it is not currently listed.
+
 Company: Netlink General Solutions, headquartered in Addis Ababa, Ethiopia.
 Mission: World-class IT company operating in Africa, delivering enterprise-grade
 infrastructure, AI, and digital transformation. Team of 20+ internationally
