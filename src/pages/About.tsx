@@ -2,42 +2,10 @@ import { motion } from "framer-motion";
 import { Building2, Target, Eye, Award, Users } from "lucide-react";
 
 const team = [
-  {
-    name: "Mr. Fikadu Alemayehu",
-    role: "Founder & CEO",
-    initials: "FA",
-    bio: "With a passion for technology and innovation, Mr. Fikadu founded Netlink General Solutions to address the technological challenges in Ethiopia. His vision and leadership have been instrumental in steering the company towards success.",
-  },
-  {
-    name: "Mr. Feyisa Bekele",
-    role: "Chief Technology Officer",
-    initials: "FB",
-    bio: "Brings over 10 years of experience in IT infrastructure and network solutions. His expertise in designing and implementing advanced technological systems has been crucial in delivering top-notch services.",
-  },
-  {
-    name: "Mr. Ysak Alemayehu",
-    role: "Head of Business Development",
-    initials: "YA",
-    bio: "Responsible for identifying new business opportunities and fostering partnerships with global IT companies. His strategic approach and market insights have helped expand reach and capabilities.",
-  },
-  {
-    name: "Ms. Hana Alemu",
-    role: "Lead Software Engineer",
-    initials: "HA",
-    bio: "Leads the software development team with a focus on creating innovative and user-friendly solutions. Her technical skills and dedication to quality ensure successful project delivery.",
-  },
-  {
-    name: "Engineering Team",
-    role: "IT & Network Engineers",
-    initials: "ET",
-    bio: "Mr. Fayera, Mr. Lalisa, and Mr. Henok specialize in IT and network solutions, ensuring clients receive reliable and efficient service.",
-  },
-  {
-    name: "Infrastructure Team",
-    role: "Data Center & Facility Engineers",
-    initials: "IT",
-    bio: "Mr. Endale, Mr. Abebe, and Mr. Abdi are responsible for maintaining and optimizing data center facilities, ensuring robust and reliable infrastructure.",
-  },
+  { name: "Mrs. Selam Asmelash Kasa", role: "Chairperson", initials: "SA" },
+  { name: "Mr. Agegnehu Asnakew Admassie", role: "Vice Chairperson", initials: "AA" },
+  { name: "Mr. Fikadu Alemayehu Bekele", role: "Secretary", initials: "FA" },
+  { name: "Mr. Feyisa Bekele Wondimu", role: "Treasurer", initials: "FB" },
 ];
 
 const fadeUp = {
@@ -155,13 +123,13 @@ export default function About() {
               The Team
             </div>
             <h2 className="font-heading font-bold text-4xl mb-4">Key Team Members</h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              Our certified experts bring decades of combined experience to deliver world-class IT solutions.
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Meet the leadership team of Netlink General Solutions, committed to strategic leadership, accountability, and delivering reliable, innovative, and high-quality IT solutions.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {team.map(({ name, role, initials, bio }, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {team.map(({ name, role, initials }, i) => (
               <motion.div
                 key={name}
                 custom={i}
@@ -169,18 +137,13 @@ export default function About() {
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeUp}
-                className="p-6 bg-card rounded-xl border border-border shadow-card hover:border-cyan-brand/30 hover:shadow-glow transition-all group"
+                className="p-6 bg-card rounded-xl border border-border shadow-card hover:border-cyan-brand/30 hover:shadow-glow transition-all group flex flex-col items-center text-center"
               >
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-xl gradient-brand flex items-center justify-center font-heading font-bold text-primary-foreground text-sm group-hover:scale-110 transition-transform">
-                    {initials}
-                  </div>
-                  <div>
-                    <div className="font-heading font-semibold text-sm">{name}</div>
-                    <div className="text-xs text-cyan-brand">{role}</div>
-                  </div>
+                <div className="w-16 h-16 rounded-xl gradient-brand flex items-center justify-center font-heading font-bold text-primary-foreground text-lg mb-4 group-hover:scale-110 transition-transform">
+                  {initials}
                 </div>
-                <p className="text-muted-foreground text-sm leading-relaxed">{bio}</p>
+                <div className="font-heading font-semibold text-base">{name}</div>
+                <div className="text-sm text-cyan-brand mt-1">{role}</div>
               </motion.div>
             ))}
           </div>
