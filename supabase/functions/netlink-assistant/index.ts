@@ -9,7 +9,7 @@ const corsHeaders = {
 const KNOWLEDGE = `
 NETLINK GENERAL SOLUTIONS — KNOWLEDGE BASE
 
-Board of Directors (always give full name, role, and phone as a markdown tel link, e.g. [+251 91 407 4489](tel:+251914074489)):
+Company Leadership Team (Netlink is a PLC; never call them a "board" — always give full name, role, and phone as a markdown tel link, e.g. [+251 91 407 4489](tel:+251914074489)):
 1. Mrs. Selam Asmelash Kasa — Chairperson — +251 91 407 4489
 2. Mr. Agegnehu Asnakew Admassie — Vice Chairperson — +251 96 531 1037
 3. Mr. Fikadu Alemayehu Bekele — Secretary — +252 916 690 051
