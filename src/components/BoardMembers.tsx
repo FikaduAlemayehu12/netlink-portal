@@ -14,7 +14,7 @@ export default function BoardMembers() {
             Leadership
           </div>
           <h2 id="board-heading" className="font-heading font-bold text-4xl md:text-5xl text-foreground">
-            Board of Directors
+            Company Leadership Team
           </h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

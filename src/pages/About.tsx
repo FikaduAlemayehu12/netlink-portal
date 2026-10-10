@@ -122,7 +122,7 @@ export default function About() {
             <div className="inline-block px-3 py-1 bg-accent/10 text-cyan-brand text-xs tracking-widest uppercase rounded-full mb-3">
               The Team
             </div>
-            <h2 className="font-heading font-bold text-4xl mb-4">Key Team Members</h2>
+            <h2 className="font-heading font-bold text-4xl mb-4">Company Leadership Team</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Meet the leadership team of Netlink General Solutions, committed to strategic leadership, accountability, and delivering reliable, innovative, and high-quality IT solutions.
             </p>
