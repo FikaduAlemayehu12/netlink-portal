@@ -9,79 +9,44 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TermsRouteImport } from './routes/terms'
-import { Route as SolutionsRouteImport } from './routes/solutions'
-import { Route as ServicesRouteImport } from './routes/services'
-import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as PortalRouteImport } from './routes/portal'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as CareersRouteImport } from './routes/careers'
-import { Route as BlogRouteImport } from './routes/blog'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as StaffVacanciesRouteImport } from './routes/staff/vacancies'
-import { Route as StaffTicketsRouteImport } from './routes/staff/tickets'
-import { Route as StaffTeamRouteImport } from './routes/staff/team'
-import { Route as StaffSiteContentRouteImport } from './routes/staff/site-content'
-import { Route as StaffSiteCmsRouteImport } from './routes/staff/site-cms'
-import { Route as StaffSettingsRouteImport } from './routes/staff/settings'
-import { Route as StaffSalaryRouteImport } from './routes/staff/salary'
-import { Route as StaffResetPasswordRouteImport } from './routes/staff/reset-password'
-import { Route as StaffRecycleBinRouteImport } from './routes/staff/recycle-bin'
-import { Route as StaffProjectsRouteImport } from './routes/staff/projects'
-import { Route as StaffProfileRouteImport } from './routes/staff/profile'
-import { Route as StaffPlansRouteImport } from './routes/staff/plans'
-import { Route as StaffPerformanceRouteImport } from './routes/staff/performance'
-import { Route as StaffNotificationsRouteImport } from './routes/staff/notifications'
-import { Route as StaffMessagesRouteImport } from './routes/staff/messages'
-import { Route as StaffLoginRouteImport } from './routes/staff/login'
-import { Route as StaffHrRouteImport } from './routes/staff/hr'
-import { Route as StaffDashboardRouteImport } from './routes/staff/dashboard'
-import { Route as StaffChangePasswordRouteImport } from './routes/staff/change-password'
-import { Route as StaffAttendanceRouteImport } from './routes/staff/attendance'
-import { Route as StaffApplicationsRouteImport } from './routes/staff/applications'
-import { Route as StaffActivityLogRouteImport } from './routes/staff/activity-log'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as BlogRouteImport } from './routes/blog'
+import { Route as CareersRouteImport } from './routes/careers'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as PortalRouteImport } from './routes/portal'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ServicesRouteImport } from './routes/services'
+import { Route as SolutionsRouteImport } from './routes/solutions'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as BlogIdRouteImport } from './routes/blog.$id'
+import { Route as StaffActivityLogRouteImport } from './routes/staff/activity-log'
+import { Route as StaffApplicationsRouteImport } from './routes/staff/applications'
+import { Route as StaffAttendanceRouteImport } from './routes/staff/attendance'
+import { Route as StaffChangePasswordRouteImport } from './routes/staff/change-password'
+import { Route as StaffDashboardRouteImport } from './routes/staff/dashboard'
+import { Route as StaffHrRouteImport } from './routes/staff/hr'
+import { Route as StaffLoginRouteImport } from './routes/staff/login'
+import { Route as StaffMessagesRouteImport } from './routes/staff/messages'
+import { Route as StaffNotificationsRouteImport } from './routes/staff/notifications'
+import { Route as StaffPerformanceRouteImport } from './routes/staff/performance'
+import { Route as StaffPlansRouteImport } from './routes/staff/plans'
+import { Route as StaffProfileRouteImport } from './routes/staff/profile'
+import { Route as StaffProjectsRouteImport } from './routes/staff/projects'
+import { Route as StaffRecycleBinRouteImport } from './routes/staff/recycle-bin'
+import { Route as StaffResetPasswordRouteImport } from './routes/staff/reset-password'
+import { Route as StaffSalaryRouteImport } from './routes/staff/salary'
+import { Route as StaffSettingsRouteImport } from './routes/staff/settings'
+import { Route as StaffSiteCmsRouteImport } from './routes/staff/site-cms'
+import { Route as StaffSiteContentRouteImport } from './routes/staff/site-content'
+import { Route as StaffTeamRouteImport } from './routes/staff/team'
+import { Route as StaffTicketsRouteImport } from './routes/staff/tickets'
+import { Route as StaffVacanciesRouteImport } from './routes/staff/vacancies'
 import { Route as StaffAdminUsersRouteImport } from './routes/staff/admin/users'
 
-const TermsRoute = TermsRouteImport.update({
-  id: '/terms',
-  path: '/terms',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SolutionsRoute = SolutionsRouteImport.update({
-  id: '/solutions',
-  path: '/solutions',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ServicesRoute = ServicesRouteImport.update({
-  id: '/services',
-  path: '/services',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyRoute = PrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PortalRoute = PortalRouteImport.update({
-  id: '/portal',
-  path: '/portal',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CareersRoute = CareersRouteImport.update({
-  id: '/careers',
-  path: '/careers',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -89,109 +54,54 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StaffVacanciesRoute = StaffVacanciesRouteImport.update({
-  id: '/staff/vacancies',
-  path: '/staff/vacancies',
+const CareersRoute = CareersRouteImport.update({
+  id: '/careers',
+  path: '/careers',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StaffTicketsRoute = StaffTicketsRouteImport.update({
-  id: '/staff/tickets',
-  path: '/staff/tickets',
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StaffTeamRoute = StaffTeamRouteImport.update({
-  id: '/staff/team',
-  path: '/staff/team',
+const PortalRoute = PortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StaffSiteContentRoute = StaffSiteContentRouteImport.update({
-  id: '/staff/site-content',
-  path: '/staff/site-content',
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StaffSiteCmsRoute = StaffSiteCmsRouteImport.update({
-  id: '/staff/site-cms',
-  path: '/staff/site-cms',
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StaffSettingsRoute = StaffSettingsRouteImport.update({
-  id: '/staff/settings',
-  path: '/staff/settings',
+const SolutionsRoute = SolutionsRouteImport.update({
+  id: '/solutions',
+  path: '/solutions',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StaffSalaryRoute = StaffSalaryRouteImport.update({
-  id: '/staff/salary',
-  path: '/staff/salary',
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StaffResetPasswordRoute = StaffResetPasswordRouteImport.update({
-  id: '/staff/reset-password',
-  path: '/staff/reset-password',
-  getParentRoute: () => rootRouteImport,
+const BlogIdRoute = BlogIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => BlogRoute,
 } as any)
-const StaffRecycleBinRoute = StaffRecycleBinRouteImport.update({
-  id: '/staff/recycle-bin',
-  path: '/staff/recycle-bin',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StaffProjectsRoute = StaffProjectsRouteImport.update({
-  id: '/staff/projects',
-  path: '/staff/projects',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StaffProfileRoute = StaffProfileRouteImport.update({
-  id: '/staff/profile',
-  path: '/staff/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StaffPlansRoute = StaffPlansRouteImport.update({
-  id: '/staff/plans',
-  path: '/staff/plans',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StaffPerformanceRoute = StaffPerformanceRouteImport.update({
-  id: '/staff/performance',
-  path: '/staff/performance',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StaffNotificationsRoute = StaffNotificationsRouteImport.update({
-  id: '/staff/notifications',
-  path: '/staff/notifications',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StaffMessagesRoute = StaffMessagesRouteImport.update({
-  id: '/staff/messages',
-  path: '/staff/messages',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StaffLoginRoute = StaffLoginRouteImport.update({
-  id: '/staff/login',
-  path: '/staff/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StaffHrRoute = StaffHrRouteImport.update({
-  id: '/staff/hr',
-  path: '/staff/hr',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StaffDashboardRoute = StaffDashboardRouteImport.update({
-  id: '/staff/dashboard',
-  path: '/staff/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StaffChangePasswordRoute = StaffChangePasswordRouteImport.update({
-  id: '/staff/change-password',
-  path: '/staff/change-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StaffAttendanceRoute = StaffAttendanceRouteImport.update({
-  id: '/staff/attendance',
-  path: '/staff/attendance',
+const StaffActivityLogRoute = StaffActivityLogRouteImport.update({
+  id: '/staff/activity-log',
+  path: '/staff/activity-log',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StaffApplicationsRoute = StaffApplicationsRouteImport.update({
@@ -199,15 +109,105 @@ const StaffApplicationsRoute = StaffApplicationsRouteImport.update({
   path: '/staff/applications',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StaffActivityLogRoute = StaffActivityLogRouteImport.update({
-  id: '/staff/activity-log',
-  path: '/staff/activity-log',
+const StaffAttendanceRoute = StaffAttendanceRouteImport.update({
+  id: '/staff/attendance',
+  path: '/staff/attendance',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BlogIdRoute = BlogIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => BlogRoute,
+const StaffChangePasswordRoute = StaffChangePasswordRouteImport.update({
+  id: '/staff/change-password',
+  path: '/staff/change-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffDashboardRoute = StaffDashboardRouteImport.update({
+  id: '/staff/dashboard',
+  path: '/staff/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffHrRoute = StaffHrRouteImport.update({
+  id: '/staff/hr',
+  path: '/staff/hr',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffLoginRoute = StaffLoginRouteImport.update({
+  id: '/staff/login',
+  path: '/staff/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffMessagesRoute = StaffMessagesRouteImport.update({
+  id: '/staff/messages',
+  path: '/staff/messages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffNotificationsRoute = StaffNotificationsRouteImport.update({
+  id: '/staff/notifications',
+  path: '/staff/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffPerformanceRoute = StaffPerformanceRouteImport.update({
+  id: '/staff/performance',
+  path: '/staff/performance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffPlansRoute = StaffPlansRouteImport.update({
+  id: '/staff/plans',
+  path: '/staff/plans',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffProfileRoute = StaffProfileRouteImport.update({
+  id: '/staff/profile',
+  path: '/staff/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffProjectsRoute = StaffProjectsRouteImport.update({
+  id: '/staff/projects',
+  path: '/staff/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffRecycleBinRoute = StaffRecycleBinRouteImport.update({
+  id: '/staff/recycle-bin',
+  path: '/staff/recycle-bin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffResetPasswordRoute = StaffResetPasswordRouteImport.update({
+  id: '/staff/reset-password',
+  path: '/staff/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffSalaryRoute = StaffSalaryRouteImport.update({
+  id: '/staff/salary',
+  path: '/staff/salary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffSettingsRoute = StaffSettingsRouteImport.update({
+  id: '/staff/settings',
+  path: '/staff/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffSiteCmsRoute = StaffSiteCmsRouteImport.update({
+  id: '/staff/site-cms',
+  path: '/staff/site-cms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffSiteContentRoute = StaffSiteContentRouteImport.update({
+  id: '/staff/site-content',
+  path: '/staff/site-content',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffTeamRoute = StaffTeamRouteImport.update({
+  id: '/staff/team',
+  path: '/staff/team',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffTicketsRoute = StaffTicketsRouteImport.update({
+  id: '/staff/tickets',
+  path: '/staff/tickets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffVacanciesRoute = StaffVacanciesRouteImport.update({
+  id: '/staff/vacancies',
+  path: '/staff/vacancies',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const StaffAdminUsersRoute = StaffAdminUsersRouteImport.update({
   id: '/staff/admin/users',
@@ -473,60 +473,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/terms': {
-      id: '/terms'
-      path: '/terms'
-      fullPath: '/terms'
-      preLoaderRoute: typeof TermsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/solutions': {
-      id: '/solutions'
-      path: '/solutions'
-      fullPath: '/solutions'
-      preLoaderRoute: typeof SolutionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/services': {
-      id: '/services'
-      path: '/services'
-      fullPath: '/services'
-      preLoaderRoute: typeof ServicesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/portal': {
-      id: '/portal'
-      path: '/portal'
-      fullPath: '/portal'
-      preLoaderRoute: typeof PortalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/careers': {
-      id: '/careers'
-      path: '/careers'
-      fullPath: '/careers'
-      preLoaderRoute: typeof CareersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -536,151 +487,74 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/staff/vacancies': {
-      id: '/staff/vacancies'
-      path: '/staff/vacancies'
-      fullPath: '/staff/vacancies'
-      preLoaderRoute: typeof StaffVacanciesRouteImport
+    '/careers': {
+      id: '/careers'
+      path: '/careers'
+      fullPath: '/careers'
+      preLoaderRoute: typeof CareersRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/staff/tickets': {
-      id: '/staff/tickets'
-      path: '/staff/tickets'
-      fullPath: '/staff/tickets'
-      preLoaderRoute: typeof StaffTicketsRouteImport
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/staff/team': {
-      id: '/staff/team'
-      path: '/staff/team'
-      fullPath: '/staff/team'
-      preLoaderRoute: typeof StaffTeamRouteImport
+    '/portal': {
+      id: '/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof PortalRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/staff/site-content': {
-      id: '/staff/site-content'
-      path: '/staff/site-content'
-      fullPath: '/staff/site-content'
-      preLoaderRoute: typeof StaffSiteContentRouteImport
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/staff/site-cms': {
-      id: '/staff/site-cms'
-      path: '/staff/site-cms'
-      fullPath: '/staff/site-cms'
-      preLoaderRoute: typeof StaffSiteCmsRouteImport
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/staff/settings': {
-      id: '/staff/settings'
-      path: '/staff/settings'
-      fullPath: '/staff/settings'
-      preLoaderRoute: typeof StaffSettingsRouteImport
+    '/solutions': {
+      id: '/solutions'
+      path: '/solutions'
+      fullPath: '/solutions'
+      preLoaderRoute: typeof SolutionsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/staff/salary': {
-      id: '/staff/salary'
-      path: '/staff/salary'
-      fullPath: '/staff/salary'
-      preLoaderRoute: typeof StaffSalaryRouteImport
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/staff/reset-password': {
-      id: '/staff/reset-password'
-      path: '/staff/reset-password'
-      fullPath: '/staff/reset-password'
-      preLoaderRoute: typeof StaffResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
+    '/blog/$id': {
+      id: '/blog/$id'
+      path: '/$id'
+      fullPath: '/blog/$id'
+      preLoaderRoute: typeof BlogIdRouteImport
+      parentRoute: typeof BlogRoute
     }
-    '/staff/recycle-bin': {
-      id: '/staff/recycle-bin'
-      path: '/staff/recycle-bin'
-      fullPath: '/staff/recycle-bin'
-      preLoaderRoute: typeof StaffRecycleBinRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/staff/projects': {
-      id: '/staff/projects'
-      path: '/staff/projects'
-      fullPath: '/staff/projects'
-      preLoaderRoute: typeof StaffProjectsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/staff/profile': {
-      id: '/staff/profile'
-      path: '/staff/profile'
-      fullPath: '/staff/profile'
-      preLoaderRoute: typeof StaffProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/staff/plans': {
-      id: '/staff/plans'
-      path: '/staff/plans'
-      fullPath: '/staff/plans'
-      preLoaderRoute: typeof StaffPlansRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/staff/performance': {
-      id: '/staff/performance'
-      path: '/staff/performance'
-      fullPath: '/staff/performance'
-      preLoaderRoute: typeof StaffPerformanceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/staff/notifications': {
-      id: '/staff/notifications'
-      path: '/staff/notifications'
-      fullPath: '/staff/notifications'
-      preLoaderRoute: typeof StaffNotificationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/staff/messages': {
-      id: '/staff/messages'
-      path: '/staff/messages'
-      fullPath: '/staff/messages'
-      preLoaderRoute: typeof StaffMessagesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/staff/login': {
-      id: '/staff/login'
-      path: '/staff/login'
-      fullPath: '/staff/login'
-      preLoaderRoute: typeof StaffLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/staff/hr': {
-      id: '/staff/hr'
-      path: '/staff/hr'
-      fullPath: '/staff/hr'
-      preLoaderRoute: typeof StaffHrRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/staff/dashboard': {
-      id: '/staff/dashboard'
-      path: '/staff/dashboard'
-      fullPath: '/staff/dashboard'
-      preLoaderRoute: typeof StaffDashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/staff/change-password': {
-      id: '/staff/change-password'
-      path: '/staff/change-password'
-      fullPath: '/staff/change-password'
-      preLoaderRoute: typeof StaffChangePasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/staff/attendance': {
-      id: '/staff/attendance'
-      path: '/staff/attendance'
-      fullPath: '/staff/attendance'
-      preLoaderRoute: typeof StaffAttendanceRouteImport
+    '/staff/activity-log': {
+      id: '/staff/activity-log'
+      path: '/staff/activity-log'
+      fullPath: '/staff/activity-log'
+      preLoaderRoute: typeof StaffActivityLogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/staff/applications': {
@@ -690,19 +564,145 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffApplicationsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/staff/activity-log': {
-      id: '/staff/activity-log'
-      path: '/staff/activity-log'
-      fullPath: '/staff/activity-log'
-      preLoaderRoute: typeof StaffActivityLogRouteImport
+    '/staff/attendance': {
+      id: '/staff/attendance'
+      path: '/staff/attendance'
+      fullPath: '/staff/attendance'
+      preLoaderRoute: typeof StaffAttendanceRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/blog/$id': {
-      id: '/blog/$id'
-      path: '/$id'
-      fullPath: '/blog/$id'
-      preLoaderRoute: typeof BlogIdRouteImport
-      parentRoute: typeof BlogRoute
+    '/staff/change-password': {
+      id: '/staff/change-password'
+      path: '/staff/change-password'
+      fullPath: '/staff/change-password'
+      preLoaderRoute: typeof StaffChangePasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/dashboard': {
+      id: '/staff/dashboard'
+      path: '/staff/dashboard'
+      fullPath: '/staff/dashboard'
+      preLoaderRoute: typeof StaffDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/hr': {
+      id: '/staff/hr'
+      path: '/staff/hr'
+      fullPath: '/staff/hr'
+      preLoaderRoute: typeof StaffHrRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/login': {
+      id: '/staff/login'
+      path: '/staff/login'
+      fullPath: '/staff/login'
+      preLoaderRoute: typeof StaffLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/messages': {
+      id: '/staff/messages'
+      path: '/staff/messages'
+      fullPath: '/staff/messages'
+      preLoaderRoute: typeof StaffMessagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/notifications': {
+      id: '/staff/notifications'
+      path: '/staff/notifications'
+      fullPath: '/staff/notifications'
+      preLoaderRoute: typeof StaffNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/performance': {
+      id: '/staff/performance'
+      path: '/staff/performance'
+      fullPath: '/staff/performance'
+      preLoaderRoute: typeof StaffPerformanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/plans': {
+      id: '/staff/plans'
+      path: '/staff/plans'
+      fullPath: '/staff/plans'
+      preLoaderRoute: typeof StaffPlansRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/profile': {
+      id: '/staff/profile'
+      path: '/staff/profile'
+      fullPath: '/staff/profile'
+      preLoaderRoute: typeof StaffProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/projects': {
+      id: '/staff/projects'
+      path: '/staff/projects'
+      fullPath: '/staff/projects'
+      preLoaderRoute: typeof StaffProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/recycle-bin': {
+      id: '/staff/recycle-bin'
+      path: '/staff/recycle-bin'
+      fullPath: '/staff/recycle-bin'
+      preLoaderRoute: typeof StaffRecycleBinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/reset-password': {
+      id: '/staff/reset-password'
+      path: '/staff/reset-password'
+      fullPath: '/staff/reset-password'
+      preLoaderRoute: typeof StaffResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/salary': {
+      id: '/staff/salary'
+      path: '/staff/salary'
+      fullPath: '/staff/salary'
+      preLoaderRoute: typeof StaffSalaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/settings': {
+      id: '/staff/settings'
+      path: '/staff/settings'
+      fullPath: '/staff/settings'
+      preLoaderRoute: typeof StaffSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/site-cms': {
+      id: '/staff/site-cms'
+      path: '/staff/site-cms'
+      fullPath: '/staff/site-cms'
+      preLoaderRoute: typeof StaffSiteCmsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/site-content': {
+      id: '/staff/site-content'
+      path: '/staff/site-content'
+      fullPath: '/staff/site-content'
+      preLoaderRoute: typeof StaffSiteContentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/team': {
+      id: '/staff/team'
+      path: '/staff/team'
+      fullPath: '/staff/team'
+      preLoaderRoute: typeof StaffTeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/tickets': {
+      id: '/staff/tickets'
+      path: '/staff/tickets'
+      fullPath: '/staff/tickets'
+      preLoaderRoute: typeof StaffTicketsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/vacancies': {
+      id: '/staff/vacancies'
+      path: '/staff/vacancies'
+      fullPath: '/staff/vacancies'
+      preLoaderRoute: typeof StaffVacanciesRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/staff/admin/users': {
       id: '/staff/admin/users'
