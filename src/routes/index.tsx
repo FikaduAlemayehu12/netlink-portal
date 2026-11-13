@@ -5,6 +5,7 @@ import IndexPage from "@/pages/Index";
 import About from "@/pages/About";
 import Services from "@/pages/Services";
 import Solutions from "@/pages/Solutions";
+import Blog from "@/pages/Blog";
 import Careers from "@/pages/Careers";
 import Contact from "@/pages/Contact";
 
@@ -21,6 +22,7 @@ function HomeOnePage() {
       <section id="about" className="scroll-mt-24"><About /></section>
       <section id="services" className="scroll-mt-24"><Services /></section>
       <section id="solutions" className="scroll-mt-24"><Solutions /></section>
+      <section id="blog" className="scroll-mt-24"><Blog /></section>
       <section id="careers" className="scroll-mt-24"><Careers /></section>
       <section id="contact" className="scroll-mt-24"><Contact /></section>
     </PublicLayout>

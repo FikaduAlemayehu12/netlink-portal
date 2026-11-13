@@ -18,7 +18,7 @@ export default function Navbar() {
     { label: t("nav.services"),  path: "/services", id: "services" },
     { label: t("nav.solutions"), path: "/solutions", id: "solutions" },
     { label: lang === "am" ? "አመራር" : "Leadership", path: "/#leadership", id: "leadership" },
-    { label: t("nav.blog"),      path: "/blog" },
+    { label: t("nav.blog"),      path: "/blog", id: "blog" },
     { label: t("nav.careers"),   path: "/careers", id: "careers" },
     { label: t("nav.contact"),   path: "/contact", id: "contact" },
   ] as { label: string; path: string; id?: string }[];
