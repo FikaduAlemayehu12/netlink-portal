@@ -29,6 +29,9 @@ interface Slide {
 // Hard-coded 10-slide hero configuration
 const slides: Slide[] = [
   { id: "s1", image_url: slideWelcome, title: "Welcome to Netlink General Solutions", caption: "Professional technology and business solutions for Ethiopia's growing organizations.", cta_label: "Get Started", cta_link: "/contact" },
+  { id: "p1", image_url: slideItEquip, title: "IT & Technology Products", caption: "Computers, IT equipment, mobile phones, telecommunications devices, accessories, storage devices and computer peripherals.", cta_label: "Our Services", cta_link: "/services" },
+  { id: "p2", image_url: slideFiber, title: "Network Design, Cabling & Implementation", caption: "Computer network design, structured cabling, internet cable installation and full network implementation.", cta_label: "Explore Networking", cta_link: "/services" },
+  { id: "p3", image_url: slideConsulting, title: "Office Stationery & Supplies", caption: "Stationery, paper products, packaging materials, books, printing and advertising supplies, printer and photocopier inks and other office essentials.", cta_label: "Request a Quote", cta_link: "/contact" },
   { id: "s2", image_url: slideSoftware, title: "Software Development", caption: "Reliable, scalable, and user-focused software built for your business.", cta_label: "Our Services", cta_link: "/services" },
   { id: "s3", image_url: slideTower, title: "IT Infrastructure & Networking", caption: "Secure and dependable connectivity through enterprise networks and cabling.", cta_label: "Explore Networking", cta_link: "/services" },
   { id: "s4", image_url: slideSmartcity, title: "Digital Transformation", caption: "Modernizing business operations through smart, integrated technology.", cta_label: "View Solutions", cta_link: "/solutions" },
