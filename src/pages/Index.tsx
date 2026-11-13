@@ -129,7 +129,7 @@ export default function Index() {
       {/* Partners + trust badges */}
       <PartnersStrip />
 
-      <BoardMembers />
+      <div id="leadership" className="scroll-mt-24"><BoardMembers /></div>
 
       {/* Mission Strip — concise, no team/certified-experts paragraph */}
       <section className="py-20 gradient-hero relative overflow-hidden">

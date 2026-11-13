@@ -13,14 +13,49 @@ export default function Navbar() {
   const { t, lang, toggle } = useLanguage();
 
   const navLinks = [
-    { label: t("nav.home"),      path: "/" },
-    { label: t("nav.about"),     path: "/about" },
-    { label: t("nav.services"),  path: "/services" },
-    { label: t("nav.solutions"), path: "/solutions" },
+    { label: t("nav.home"),      path: "/", id: "home" },
+    { label: t("nav.about"),     path: "/about", id: "about" },
+    { label: t("nav.services"),  path: "/services", id: "services" },
+    { label: t("nav.solutions"), path: "/solutions", id: "solutions" },
+    { label: lang === "am" ? "አመራር" : "Leadership", path: "/#leadership", id: "leadership" },
     { label: t("nav.blog"),      path: "/blog" },
-    { label: t("nav.careers"),   path: "/careers" },
-    { label: t("nav.contact"),   path: "/contact" },
-  ];
+    { label: t("nav.careers"),   path: "/careers", id: "careers" },
+    { label: t("nav.contact"),   path: "/contact", id: "contact" },
+  ] as { label: string; path: string; id?: string }[];
+
+  const onHome = location.pathname === "/";
+  const [activeId, setActiveId] = useState("home");
+
+  useEffect(() => {
+    if (!onHome) return;
+    const ids = navLinks.filter((l) => l.id).map((l) => l.id as string);
+    const spy = () => {
+      let cur = "home";
+      let best = -Infinity;
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        const top = el ? el.getBoundingClientRect().top : Infinity;
+        if (top <= 120 && top > best) { best = top; cur = id; }
+      }
+      setActiveId(cur);
+    };
+    spy();
+    window.addEventListener("scroll", spy, { passive: true });
+    return () => window.removeEventListener("scroll", spy);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onHome]);
+
+  const isActive = (link: { path: string; id?: string }) =>
+    onHome ? (link.id ? activeId === link.id : false) : location.pathname === link.path;
+
+  const goTo = (e: React.MouseEvent, id: string) => {
+    setOpen(false);
+    if (!onHome) return; // normal navigation to /#id; home page scrolls on load
+    e.preventDefault();
+    if (id === "home") window.scrollTo({ top: 0, behavior: "smooth" });
+    else document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.history.replaceState(null, "", id === "home" ? "/" : `/#${id}`);
+  };
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
@@ -81,13 +116,13 @@ export default function Navbar() {
 
         <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1">
           {navLinks.map((link) => {
-            const active = location.pathname === link.path;
+            const active = isActive(link);
             return (
-              <Link key={link.path} to={link.path}
+              <NavItem key={link.path} link={link} goTo={goTo}
                 className={`relative px-3 xl:px-4 py-2 text-sm font-semibold font-heading tracking-wide rounded-md transition-colors ${active ? "text-emerald-brand" : "text-sky-text/90 hover:text-cyan-brand"}`}>
                 {link.label}
                 {active && <motion.span layoutId="nav-underline" className="absolute left-3 right-3 -bottom-0.5 h-[2px] rounded-full bg-[image:var(--gradient-brand)]" />}
-              </Link>
+              </NavItem>
             );
           })}
           <Link to="/contact" className="ml-3 px-5 py-2 bg-[image:var(--gradient-brand)] text-white text-sm font-heading font-semibold rounded-md hover:brightness-110 hover:scale-[1.02] transition-all shadow-glow">
@@ -106,12 +141,12 @@ export default function Navbar() {
             className="lg:hidden bg-navy-dark/98 backdrop-blur-md border-t border-cyan-brand/20 overflow-hidden">
             <nav className="container mx-auto py-4 px-4 flex flex-col gap-1">
               {navLinks.map((link) => {
-                const active = location.pathname === link.path;
+                const active = isActive(link);
                 return (
-                  <Link key={link.path} to={link.path}
+                  <NavItem key={link.path} link={link} goTo={goTo}
                     className={`relative px-4 py-3 text-sm font-heading font-semibold tracking-wide rounded-md transition-colors ${active ? "text-emerald-brand bg-emerald-brand/10" : "text-sky-text/90 hover:text-cyan-brand hover:bg-cyan-brand/5"}`}>
                     {link.label}
-                  </Link>
+                  </NavItem>
                 );
               })}
               <div className="mt-2 pt-3 border-t border-cyan-brand/15 flex items-center justify-between">
@@ -136,4 +171,10 @@ export default function Navbar() {
       </AnimatePresence>
     </header>
   );
+}
+
+function NavItem({ link, goTo, className, children }: { link: { path: string; id?: string }; goTo: (e: React.MouseEvent, id: string) => void; className?: string; children: React.ReactNode }) {
+  if (!link.id) return <Link to={link.path} className={className}>{children}</Link>;
+  const href = link.id === "home" ? "/" : `/#${link.id}`;
+  return <a href={href} onClick={(e) => goTo(e, link.id as string)} className={className}>{children}</a>;
 }
