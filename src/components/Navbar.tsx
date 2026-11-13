@@ -31,9 +31,11 @@ export default function Navbar() {
     const ids = navLinks.filter((l) => l.id).map((l) => l.id as string);
     const spy = () => {
       let cur = "home";
+      let best = -Infinity;
       for (const id of ids) {
         const el = document.getElementById(id);
-        if (el && el.getBoundingClientRect().top <= 120) cur = id;
+        const top = el ? el.getBoundingClientRect().top : Infinity;
+        if (top <= 120 && top > best) { best = top; cur = id; }
       }
       setActiveId(cur);
     };
