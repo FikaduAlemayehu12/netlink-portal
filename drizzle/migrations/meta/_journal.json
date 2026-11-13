@@ -8,6 +8,13 @@
       "when": 1794557181296,
       "tag": "0000_tighten_public_reads_and_attachments",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794558655823,
+      "tag": "0001_add_it_and_office_supply_services",
+      "breakpoints": true
     }
   ]
 }

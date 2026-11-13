@@ -51,6 +51,12 @@ export default function About() {
               <p className="text-muted-foreground leading-relaxed mb-4">
                 Netlink General Solutions was established in 2024 with a vision to revolutionize the IT sector in Ethiopia. Recognizing the gaps in technology and networking infrastructure, we embarked on a journey to provide innovative solutions tailored to the unique needs of the Ethiopian market.
               </p>
+              <p className="text-muted-foreground leading-relaxed mb-4">
+                NETLINK GENERAL SOLUTIONS PLC first delivers IT and technology services: computers, IT equipment, mobile phones, telecommunications devices, accessories, storage devices and computer peripherals, together with computer network design, structured cabling, internet cable installation and network implementation.
+              </p>
+              <p className="text-muted-foreground leading-relaxed mb-4">
+                We also supply office stationery, paper and paper products, packaging materials, books, printing and advertising supplies, printer and photocopier inks, and other office essentials.
+              </p>
               <p className="text-muted-foreground leading-relaxed">
                 Over the years, we have successfully completed various IT projects, solving critical problems and proving our potential to drive technological advancement. Our commitment to excellence has positioned us as a promising player in the IT industry, with aspirations to elevate Ethiopia's technology landscape.
               </p>
